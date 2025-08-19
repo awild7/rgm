@@ -533,6 +533,7 @@ int main(int argc, char ** argv)
   char temp_name[100];
   char temp_title[100];
 
+  vector<TH1*> hist_list;
  
   TH2D * h_e_phi_corr_binSector_binTheta[6][14];
   TGraphErrors * g_e_phi_corr_binSector_binTheta[6][14];
@@ -547,9 +548,10 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"e_phi_corr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction;Counts",j,min,max);
+      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction [GeV];Counts",j,min,max);
       h_e_phi_corr_binSector_binTheta[j-1][i] = (TH2D*)inFile->Get(temp_name);
-
+      hist_list.push_back(h_e_phi_corr_binSector_binTheta[j-1][i]);
+      
       g_e_phi_corr_binSector_binTheta[j-1][i] = new TGraphErrors();
       sprintf(temp_name,"g_e_phi_corr_sector_%d_theta_%d",j,i);
       g_e_phi_corr_binSector_binTheta[j-1][i]->SetName(temp_name);
@@ -582,8 +584,9 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"p_phi_corr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction;Counts",j,min,max);
+      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction [GeV];Counts",j,min,max);
       h_p_phi_corr_binSector_binTheta[j-1][i] = (TH2D*)inFile->Get(temp_name);
+      hist_list.push_back(h_p_phi_corr_binSector_binTheta[j-1][i]);
 
       g_p_phi_corr_binSector_binTheta[j-1][i] = new TGraphErrors();
       sprintf(temp_name,"g_p_phi_corr_sector_%d_theta_%d",j,i);
@@ -614,8 +617,9 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"phi_corr_theta_%d",i);
-    sprintf(temp_title,"Correction vs. #phi (%d< #theta < %d);#phi;Correction;Counts",min,max);
+    sprintf(temp_title,"Correction vs. #phi (%d< #theta < %d);#phi;Correction [GeV];Counts",min,max);
     h_phi_corr_binThetaCD[i] = (TH2D*)inFile->Get(temp_name);
+    hist_list.push_back(h_phi_corr_binThetaCD[i]);
     
     g_phi_corr_binThetaCD[i] = new TGraphErrors();
     sprintf(temp_name,"g_phi_corr_theta_%d",i);
@@ -631,6 +635,35 @@ int main(int argc, char ** argv)
     //f_phi_corr_Combined_binThetaCD[i] = new TF1(temp_name,[&](double *x, double *p){ return FuncPhiDependenceCD(x[0],p[0],p[1],p[2]); },-180,180,5);
   }
   
+  TH1D * h_Delta_Int_Eprime_beforeRad = (TH1D*)inFile->Get("Delta_Eprime_beforeRad");
+  //"#Delta p_{e} (e,e'p);#Delta p_{e} [GeV];Counts"
+  hist_list.push_back(h_Delta_Int_Eprime_beforeRad);
+  TH1D * h_Delta_Int_Eprime_Corrected = (TH1D*)inFile->Get("Delta_Eprime_Corrected");//,"#Delta p_{e} (e,e'p);#Delta p_{e} [GeV];Counts",100,-0.2,0.2);
+  hist_list.push_back(h_Delta_Int_Eprime_Corrected);  
+  TH1D * h_Delta_Int_pMomFD = (TH1D*)inFile->Get("Delta_pMomFD");//,"#Delta p_{p} (e,e'p_{FD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomFD);
+  TH1D * h_Delta_Int_pMomFD_Corrected = (TH1D*)inFile->Get("Delta_pMomFD_Corrected");//,"#Delta p_{p} (e,e'p_{FD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomFD_Corrected);
+  TH1D * h_Delta_Int_pMomCD = (TH1D*)inFile->Get("Delta_pMomCD");//,"#Delta p_{p} (e,e'p_{CD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomCD);
+  TH1D * h_Delta_Int_pMomCD_Corrected = (TH1D*)inFile->Get("Delta_pMomCD_Corrected");//,"#Delta p_{p} (e,e'p_{CD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomCD_Corrected);
+
+  
+  for(int i=0; i<hist_list.size(); i++){
+    hist_list[i]->Sumw2();
+    hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
+    hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
+    hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->CenterTitle();
+  }
+
 
   /////////////////////////////////////////////////////
   //Now create the output PDFs
@@ -641,7 +674,13 @@ int main(int argc, char ** argv)
   TCanvas * myText = new TCanvas("myText","myText",pixelx,pixely);
   TLatex text;
   text.SetTextSize(0.05);
-  
+
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   char fileName[100];
   sprintf(fileName,"%s[",pdfFile);
   myText->SaveAs(fileName);
@@ -652,10 +691,12 @@ int main(int argc, char ** argv)
   TFitResultPtr p_e_params[6][4];
   for(int j = 0; j < 6; j++){
     TGraph * e_params[4];
+    TGraphErrors * e_params_Errors[4];
     TF1 * f_e_params[4];
     double guess[4];
     for(int k = 0; k < 4; k++){
       e_params[k] = new TGraph();
+      e_params_Errors[k] = new TGraphErrors();
       sprintf(temp_name,"e_params_%d",k);
       f_e_params[k] = new TF1(temp_name,[&](double *x, double *p){ return ErfFunc(x[0],p[0],p[1],p[2],p[3]);},5,50,4);
       f_e_params[k]->SetParameter(2,20);
@@ -725,6 +766,8 @@ int main(int argc, char ** argv)
       double x = (bE_Theta[i]+bE_Theta[i+1])/2;
       for(int k = 0; k < 4; k++){
 	e_params[k]->SetPoint(e_params[k]->GetN(),x,p_e_phi_corr_binSector_binTheta[j][i]->Parameter(k));
+	e_params_Errors[k]->SetPoint(e_params_Errors[k]->GetN(),x,p_e_phi_corr_binSector_binTheta[j][i]->Parameter(k));
+	e_params_Errors[k]->SetPointError(e_params_Errors[k]->GetN()-1,0,p_e_phi_corr_binSector_binTheta[j][i]->ParError(k));
 	guess[k]=p_e_phi_corr_binSector_binTheta[j][i]->Parameter(k);
       }
       
@@ -741,9 +784,11 @@ int main(int argc, char ** argv)
       }
     }
 
-    myCanvas->Divide(3,3);
+    myCanvas->Divide(3,3,0,0);
     for(int i = 0; i < 9; i++){
       myCanvas->cd(i+1);
+      myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
       h_e_phi_corr_binSector_binTheta[j][i]->Draw("colz");
       g_e_phi_corr_binSector_binTheta[j][i]->SetLineColor(2);
       g_e_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
@@ -755,23 +800,38 @@ int main(int argc, char ** argv)
     myCanvas->Clear();
 
     char* names[4] = {"C_{a}","C_{b}","C_{c}","C_{d}"};
-    myCanvas->Divide(2,2);
+    myCanvas->Divide(2,2,0,0);
     for(int k = 0; k < 4; k++){
       myCanvas->cd(k+1);      
-      myCanvas->GetPad(k+1)->SetLeftMargin(0.15);
+      myCanvas->GetPad(k+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(k+1)->SetLeftMargin(0.19);
       e_params[k]->SetLineColor(3);
+      e_params_Errors[k]->SetLineColor(3);
       f_e_params[k]->SetLineColor(4);      
       sprintf(temp_title,"%s vs. #theta #circ;#theta #circ;%s",names[k],names[k]);
-      e_params[k]->SetTitle(temp_title);
-      e_params[k]->Draw();
+      e_params_Errors[k]->GetXaxis()->CenterTitle();
+      e_params_Errors[k]->GetXaxis()->SetTitleSize(0.10);
+      e_params_Errors[k]->GetXaxis()->SetLabelSize(0.06);
+      e_params_Errors[k]->GetXaxis()->SetTitleOffset(0.8);
+      e_params_Errors[k]->GetYaxis()->CenterTitle();
+      e_params_Errors[k]->GetYaxis()->SetTitleSize(0.10);
+      e_params_Errors[k]->GetYaxis()->SetLabelSize(0.06);
+      e_params_Errors[k]->GetYaxis()->SetTitleOffset(0.8);
+      e_params_Errors[k]->GetXaxis()->CenterTitle();
+      e_params_Errors[k]->GetYaxis()->CenterTitle();
+      e_params_Errors[k]->SetTitle(temp_title);
+      //e_params[k]->Draw();
+      e_params_Errors[k]->Draw();
       f_e_params[k]->Draw("SAME");      
     }
     myCanvas->Print(fileName,"pdf");
     myCanvas->Clear();
     
-    myCanvas->Divide(3,3);
+    myCanvas->Divide(3,3,0,0);
     for(int i = 0; i < 9; i++){
       myCanvas->cd(i+1);
+      myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
       h_e_phi_corr_binSector_binTheta[j][i]->Draw("colz");
       g_e_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
       //f_e_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
@@ -795,10 +855,12 @@ int main(int argc, char ** argv)
   TFitResultPtr p_p_params[6][4];
   for(int j = 0; j < 6; j++){
     TGraph * p_params[4];
+    TGraphErrors * p_params_Errors[4];
     TF1 * f_p_params[4];
     double guess[4];
     for(int k = 0; k < 4; k++){
       p_params[k] = new TGraph();
+      p_params_Errors[k] = new TGraphErrors();
       sprintf(temp_name,"p_params_%d",k);
       /*
       f_p_params[k] = new TF1(temp_name,[&](double *x, double *p){ return FuncMomDependenceCD(x[0],p[0],p[1]);},5,50,2);
@@ -858,6 +920,8 @@ int main(int argc, char ** argv)
       double x = (bE_Theta[i]+bE_Theta[i+1])/2;
       for(int k = 0; k < 4; k++){
 	p_params[k]->SetPoint(p_params[k]->GetN(),x,p_p_phi_corr_binSector_binTheta[j][i]->Parameter(k));
+	p_params_Errors[k]->SetPoint(p_params_Errors[k]->GetN(),x,p_p_phi_corr_binSector_binTheta[j][i]->Parameter(k));
+	p_params_Errors[k]->SetPointError(p_params_Errors[k]->GetN()-1,0,p_p_phi_corr_binSector_binTheta[j][i]->ParError(k));
 	guess[k]=p_p_phi_corr_binSector_binTheta[j][i]->Parameter(k);
       }
       
@@ -874,9 +938,11 @@ int main(int argc, char ** argv)
       }
     }
     
-    myCanvas->Divide(3,2);    
+    myCanvas->Divide(3,2,0,0);    
     for(int i = 7; i < 13; i++){
       myCanvas->cd(i-6);
+      myCanvas->GetPad(i-6)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i-6)->SetLeftMargin(0.19);
       h_p_phi_corr_binSector_binTheta[j][i]->Draw("colz");
       g_p_phi_corr_binSector_binTheta[j][i]->SetLineColor(2);
       g_p_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
@@ -888,23 +954,38 @@ int main(int argc, char ** argv)
     myCanvas->Clear();
 
     char* names[4] = {"C_{a}","C_{b}","C_{c}","C_{d}"};
-    myCanvas->Divide(2,2);    
+    myCanvas->Divide(2,2,0,0);    
     for(int k = 0; k < 4; k++){
       myCanvas->cd(k+1);      
-      myCanvas->GetPad(k+1)->SetLeftMargin(0.15);
+      myCanvas->GetPad(k+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(k+1)->SetLeftMargin(0.19);
       p_params[k]->SetLineColor(3);
+      p_params_Errors[k]->SetLineColor(3);
       f_p_params[k]->SetLineColor(4);      
       sprintf(temp_title,"%s vs. #theta #circ;#theta #circ;%s",names[k],names[k]);
-      p_params[k]->SetTitle(temp_title);
-      p_params[k]->Draw();
+      p_params_Errors[k]->GetXaxis()->CenterTitle();
+      p_params_Errors[k]->GetXaxis()->SetTitleSize(0.10);
+      p_params_Errors[k]->GetXaxis()->SetLabelSize(0.06);
+      p_params_Errors[k]->GetXaxis()->SetTitleOffset(0.8);
+      p_params_Errors[k]->GetYaxis()->CenterTitle();
+      p_params_Errors[k]->GetYaxis()->SetTitleSize(0.10);
+      p_params_Errors[k]->GetYaxis()->SetLabelSize(0.06);
+      p_params_Errors[k]->GetYaxis()->SetTitleOffset(0.8);
+      p_params_Errors[k]->GetXaxis()->CenterTitle();
+      p_params_Errors[k]->GetYaxis()->CenterTitle();
+      p_params_Errors[k]->SetTitle(temp_title);
+      //p_params[k]->Draw();
+      p_params_Errors[k]->Draw();
       f_p_params[k]->Draw("SAME");
     }
     myCanvas->Print(fileName,"pdf");
     myCanvas->Clear();
 
-    myCanvas->Divide(3,2);    
+    myCanvas->Divide(3,2,0,0);    
     for(int i = 7; i < 13; i++){
       myCanvas->cd(i-6);
+      myCanvas->GetPad(i-6)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i-6)->SetLeftMargin(0.19);
       h_p_phi_corr_binSector_binTheta[j][i]->Draw("colz");
       g_p_phi_corr_binSector_binTheta[j][i]->SetLineColor(2);
       g_p_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
@@ -932,8 +1013,10 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
 				 {-2.31836,0.0177897}};
   
   TGraph * params_CD[3];
+  TGraphErrors * params_CD_Errors[3];
   for(int k = 0; k < 3; k++){
     params_CD[k] = new TGraph();
+    params_CD_Errors[k] = new TGraphErrors();
   }
   double guess_CD[3];  
   guess_CD[0]=0;
@@ -974,6 +1057,8 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
     double x = (bE_ThetaCD[i]+bE_ThetaCD[i+1])/2;
     for(int k = 0; k < 3; k++){
       params_CD[k]->SetPoint(params_CD[k]->GetN(),x,p_phi_corr_binThetaCD[i]->Parameter(k));
+      params_CD_Errors[k]->SetPoint(params_CD_Errors[k]->GetN(),x,p_phi_corr_binThetaCD[i]->Parameter(k));
+      params_CD_Errors[k]->SetPointError(params_CD_Errors[k]->GetN()-1,0,p_phi_corr_binThetaCD[i]->ParError(k));
       guess_CD[k]=p_phi_corr_binThetaCD[i]->Parameter(k);
     }
   }
@@ -1007,9 +1092,11 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
   }
   
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);    
     h_phi_corr_binThetaCD[i]->Draw("colz");
     g_phi_corr_binThetaCD[i]->SetLineColor(2);
     g_phi_corr_binThetaCD[i]->Draw("SAME");
@@ -1018,9 +1105,11 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 14; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
     g_phi_corr_binThetaCD[i]->SetLineColor(2);
     g_phi_corr_binThetaCD[i]->Draw("SAME");
@@ -1030,23 +1119,39 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
   myCanvas->Clear();
 
   char* names_CD[3] = {"C_{a}","C_{b}","C_{c}"};
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,2,0,0);
   for(int i = 0; i < 3; i++){
     myCanvas->cd(i+1);
-    myCanvas->GetPad(i+1)->SetLeftMargin(0.15);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     sprintf(temp_title,"%s vs. #theta #circ;#theta #circ;%s",names_CD[i],names_CD[i]);
-    params_CD[i]->SetTitle(temp_title);      
-    params_CD[i]->SetLineColor(3);
-    params_CD[i]->Draw();
+    params_CD_Errors[i]->SetTitle(temp_title);      
+    params_CD_Errors[i]->SetLineColor(3);
+    params_CD_Errors[i]->GetXaxis()->CenterTitle();
+    params_CD_Errors[i]->GetXaxis()->SetTitleSize(0.10);
+    params_CD_Errors[i]->GetXaxis()->SetLabelSize(0.06);
+    params_CD_Errors[i]->GetXaxis()->SetTitleOffset(0.8);
+    params_CD_Errors[i]->GetYaxis()->CenterTitle();
+    params_CD_Errors[i]->GetYaxis()->SetTitleSize(0.10);
+    params_CD_Errors[i]->GetYaxis()->SetLabelSize(0.06);
+    params_CD_Errors[i]->GetYaxis()->SetTitleOffset(0.8);
+    params_CD_Errors[i]->GetXaxis()->CenterTitle();
+    params_CD_Errors[i]->GetYaxis()->CenterTitle();
+    params_CD_Errors[i]->Draw();
+    //params_CD[i]->SetTitle(temp_title);      
+    //params_CD[i]->SetLineColor(3);
+    //params_CD[i]->Draw();
     f_params_CD[i]->Draw("SAME");      
     f_params_CD[i]->SetLineColor(4);      
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
     g_phi_corr_binThetaCD[i]->SetLineColor(2);
     g_phi_corr_binThetaCD[i]->Draw("SAME");
@@ -1055,9 +1160,11 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
     g_phi_corr_binThetaCD[i]->SetLineColor(2);
     g_phi_corr_binThetaCD[i]->Draw("SAME");
@@ -1065,10 +1172,112 @@ double params_Momentum_CD[3][2]={{-0.107267,0.00193308},
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
-  myCanvas->Divide(3,3);
 
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  TF1 * f_ab1 = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.2,0.2,3);
+  f_ab1->SetParameter(0,h_Delta_Int_Eprime_Corrected->GetMaximum()/G(0,1,0,0.1));
+  f_ab1->SetParameter(1,h_Delta_Int_Eprime_Corrected->GetBinCenter(h_Delta_Int_Eprime_Corrected->GetMaximumBin()));
+  f_ab1->SetParameter(2,0.05);
+  TFitResultPtr p_ab1 = h_Delta_Int_Eprime_Corrected->Fit(f_ab1,"SrBeqn","",-0.025,0.05);
+  f_ab1->SetLineColor(2);
+
+  TF1 * f_ab2 = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.2,0.2,3);
+  f_ab2->SetParameter(0,h_Delta_Int_Eprime_beforeRad->GetMaximum()/G(0,1,0,0.1));
+  f_ab2->SetParameter(1,h_Delta_Int_Eprime_beforeRad->GetBinCenter(h_Delta_Int_Eprime_beforeRad->GetMaximumBin()));
+  f_ab2->SetParameter(2,0.05);
+  TFitResultPtr p_ab2 = h_Delta_Int_Eprime_beforeRad->Fit(f_ab2,"SrBeqn","",-0.025,0.06);
+  f_ab2->SetLineColor(4);
+
+  TF1 * f_ab3 = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.4,0.4,3);
+  f_ab3->SetParameter(0,h_Delta_Int_pMomFD_Corrected->GetMaximum()/G(0,1,0,0.1));
+  f_ab3->SetParameter(1,h_Delta_Int_pMomFD_Corrected->GetBinCenter(h_Delta_Int_pMomFD_Corrected->GetMaximumBin()));
+  f_ab3->SetParameter(2,0.05);
+  TFitResultPtr p_ab3 = h_Delta_Int_pMomFD_Corrected->Fit(f_ab3,"SrBeqn","",-0.15,0.1);
+  f_ab3->SetLineColor(2);
+
+  TF1 * f_ab4 = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.4,0.4,3);
+  f_ab4->SetParameter(0,h_Delta_Int_pMomFD->GetMaximum()/G(0,1,0,0.1));
+  f_ab4->SetParameter(1,h_Delta_Int_pMomFD->GetBinCenter(h_Delta_Int_pMomFD->GetMaximumBin()));
+  f_ab4->SetParameter(2,0.05);
+  TFitResultPtr p_ab4 = h_Delta_Int_pMomFD->Fit(f_ab4,"SrBeqn","",-0.15,0.1);
+  f_ab4->SetLineColor(4);
+
+  TF1 * f_ab5 = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.4,0.4,3);
+  f_ab5->SetParameter(0,h_Delta_Int_pMomCD_Corrected->GetMaximum()/G(0,1,0,0.1));
+  f_ab5->SetParameter(1,h_Delta_Int_pMomCD_Corrected->GetBinCenter(h_Delta_Int_pMomCD_Corrected->GetMaximumBin()));
+  f_ab5->SetParameter(2,0.05);
+  TFitResultPtr p_ab5 = h_Delta_Int_pMomCD_Corrected->Fit(f_ab5,"SrBeqn","",-0.2,0.2);
+  f_ab5->SetLineColor(2);
+
+  TF1 * f_ab6 = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.4,0.4,3);
+  f_ab6->SetParameter(0,h_Delta_Int_pMomCD->GetMaximum()/G(0,1,0,0.1));
+  f_ab6->SetParameter(1,h_Delta_Int_pMomCD->GetBinCenter(h_Delta_Int_pMomCD->GetMaximumBin()));
+  f_ab6->SetParameter(2,0.05);
+  TFitResultPtr p_ab6 = h_Delta_Int_pMomCD->Fit(f_ab6,"SrBeqn","",-0.2,0.2);
+  f_ab6->SetLineColor(4);
+
+
+  myCanvas->Divide(1,1,0,0);
+  myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  h_Delta_Int_Eprime_Corrected->SetLineColor(2);
+  h_Delta_Int_Eprime_Corrected->Draw();
+  h_Delta_Int_Eprime_beforeRad->Draw("SAME");
+  f_ab1->Draw("SAME");
+  f_ab2->Draw("SAME");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  myCanvas->Divide(1,1,0,0);
+  myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  h_Delta_Int_pMomFD_Corrected->SetLineColor(2);
+  h_Delta_Int_pMomFD_Corrected->Draw();
+  h_Delta_Int_pMomFD->Draw("SAME");
+  f_ab3->Draw("SAME");
+  f_ab4->Draw("SAME");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  myCanvas->Divide(1,1,0,0);
+  myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  h_Delta_Int_pMomCD_Corrected->SetLineColor(2);
+  h_Delta_Int_pMomCD_Corrected->Draw();
+  h_Delta_Int_pMomCD->Draw("SAME");
+  f_ab5->Draw("SAME");
+  f_ab6->Draw("SAME");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  ///////////////////////////////////
+  
   sprintf(fileName,"%s]",pdfFile);
   myCanvas->Print(fileName,"pdf");
+
+  cout<<"\n\n";
+  cout<<"Electrons&"<<p_ab2->Parameter(1)*1000<<"&"<<p_ab1->Parameter(1)*1000<<"&"<<p_ab2->Parameter(2)*1000<<"&"<<p_ab1->Parameter(2)*1000<<"\n";
+  cout<<"FD Protons&"<<p_ab4->Parameter(1)*1000<<"&"<<p_ab3->Parameter(1)*1000<<"&"<<p_ab4->Parameter(2)*1000<<"&"<<p_ab3->Parameter(2)*1000<<"\n";
+  cout<<"CD Protons&"<<p_ab6->Parameter(1)*1000<<"&"<<p_ab5->Parameter(1)*1000<<"&"<<p_ab6->Parameter(2)*1000<<"&"<<p_ab5->Parameter(2)*1000<<"\n";
+  cout<<"\n\n";
 
   
   cout<<"params_neg_FD="<<endl<<"{";

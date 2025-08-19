@@ -276,44 +276,54 @@ int main(int argc, char ** argv)
   vector<TH1*> hist_list;
 
   TH1D * h_Delta_Int_Eprime_beforeRad = new TH1D("Delta_Eprime_beforeRad","#Delta p_{e} (e,e'p);#Delta p_{e} [GeV];Counts",100,-0.2,0.2);
+  hist_list.push_back(h_Delta_Int_Eprime_beforeRad);
   TH1D * h_Delta_Int_Eprime = new TH1D("Delta_Eprime","#Delta p_{e} - #Delta p_{e}^{radiation} (e,e'p);#Delta p_{e} [GeV];Counts",100,-0.2,0.2);
+  hist_list.push_back(h_Delta_Int_Eprime);
   TH1D * h_Delta_Int_Eprime_Corrected = new TH1D("Delta_Eprime_Corrected","#Delta p_{e} (e,e'p);#Delta p_{e} [GeV];Counts",100,-0.2,0.2);
+  hist_list.push_back(h_Delta_Int_Eprime_Corrected);  
   TH1D * h_Delta_Int_pMomFD = new TH1D("Delta_pMomFD","#Delta p_{p} (e,e'p_{FD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomFD);
   TH1D * h_Delta_Int_pMomFD_Corrected = new TH1D("Delta_pMomFD_Corrected","#Delta p_{p} (e,e'p_{FD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomFD_Corrected);
   TH1D * h_Delta_Int_pMomCD = new TH1D("Delta_pMomCD","#Delta p_{p} (e,e'p_{CD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomCD);
   TH1D * h_Delta_Int_pMomCD_Corrected = new TH1D("Delta_pMomCD_Corrected","#Delta p_{p} (e,e'p_{CD});#Delta p_{p} [GeV]; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Int_pMomCD_Corrected);
 
-  TH2D * h_phie_Dp_FD = new TH2D("phie_Dp_FD","#Delta p_{e} vs. #phi_{e} (e,e'p_{FD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
+  TH2D * h_phie_Dp_FD = new TH2D("phie_Dp_FD","Electrons (e,e'p_{FD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
   hist_list.push_back(h_phie_Dp_FD);
-  TH2D * h_phie_Dp_CD = new TH2D("phie_Dp_CD","#Delta p_{e} vs. #phi_{e} (e,e'p_{CD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
+  TH2D * h_phie_Dp_CD = new TH2D("phie_Dp_CD","Electrons (e,e'p_{CD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
   hist_list.push_back(h_phie_Dp_CD);
-  TH2D * h_phip_Dp_FD = new TH2D("phip_Dp_FD","#Delta p_{p} vs. #phi_{p} (e,e'p_{FD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
+  TH2D * h_phip_Dp_FD = new TH2D("phip_Dp_FD","Protons (e,e'p_{FD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
   hist_list.push_back(h_phip_Dp_FD);
-  TH2D * h_phip_Dp_CD = new TH2D("phip_Dp_CD","#Delta p_{p} vs. #phi_{p} (e,e'p_{CD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
+  TH2D * h_phip_Dp_CD = new TH2D("phip_Dp_CD","Protons (e,e'p_{CD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
   hist_list.push_back(h_phip_Dp_CD);
 
-  TH2D * h_thetae_Dp_FD = new TH2D("thetae_Dp_FD","#Delta p_{e} vs. #theta_{e} (e,e'p_{FD})^{#circ};#theta_{e};#Delta p_{e} [GeV];Counts",100,15,27,100,-0.2,0.2);
+  TH2D * h_thetae_Dp_FD = new TH2D("thetae_Dp_FD","Electrons (e,e'p_{FD})^{#circ};#theta_{e};#Delta p_{e} [GeV];Counts",100,15,27,100,-0.2,0.2);
   hist_list.push_back(h_thetae_Dp_FD);
-  TH2D * h_thetae_Dp_CD = new TH2D("thetae_Dp_CD","#Delta p_{e} vs. #theta_{e} (e,e'p_{CD})^{#circ};#theta_{e};#Delta p_{e} [GeV];Counts",100,7,23,100,-0.2,0.2);
+  TH2D * h_thetae_Dp_CD = new TH2D("thetae_Dp_CD","Electrons (e,e'p_{CD})^{#circ};#theta_{e};#Delta p_{e} [GeV];Counts",100,7,23,100,-0.2,0.2);
   hist_list.push_back(h_thetae_Dp_CD);
-  TH2D * h_thetap_Dp_FD = new TH2D("thetap_Dp_FD","#Delta p_{p} vs. #theta_{p} (e,e'p_{FD})^{#circ};#theta_{p};#Delta p_{p} [GeV];Counts",100,25,42,100,-0.4,0.4);
+  TH2D * h_thetap_Dp_FD = new TH2D("thetap_Dp_FD","Protons (e,e'p_{FD})^{#circ};#theta_{p};#Delta p_{p} [GeV];Counts",100,25,42,100,-0.4,0.4);
   hist_list.push_back(h_thetap_Dp_FD);
-  TH2D * h_thetap_Dp_CD = new TH2D("thetap_Dp_CD","#Delta p_{p} vs. #theta_{p} (e,e'p_{CD})^{#circ};#theta_{p};#Delta p_{p} [GeV];Counts",100,35,65,100,-0.4,0.4);
+  TH2D * h_thetap_Dp_CD = new TH2D("thetap_Dp_CD","Protons (e,e'p_{CD})^{#circ};#theta_{p};#Delta p_{p} [GeV];Counts",100,35,65,100,-0.4,0.4);
   hist_list.push_back(h_thetap_Dp_CD);
 
-  TH2D * h_phie_Dp_Corr_FD = new TH2D("phie_Dp_Corr_FD","#Delta p_{e} vs. #phi_{e} (e,e'p_{FD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
+  TH2D * h_phie_Dp_Corr_FD = new TH2D("phie_Dp_Corr_FD","Electrons (e,e'p_{FD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
   hist_list.push_back(h_phie_Dp_Corr_FD);
-  TH2D * h_phie_Dp_Corr_CD = new TH2D("phie_Dp_Corr_CD","#Delta p_{e} vs. #phi_{e} (e,e'p_{CD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
+  TH2D * h_phie_Dp_Corr_CD = new TH2D("phie_Dp_Corr_CD","Electrons (e,e'p_{CD});#phi_{e}^{#circ};#Delta p_{e} [GeV];Counts",180,-180,180,100,-0.2,0.2);
   hist_list.push_back(h_phie_Dp_Corr_CD);
-  TH2D * h_phip_Dp_Corr_FD = new TH2D("phip_Dp_Corr_FD","#Delta p_{p} vs. #phi_{p} (e,e'p_{FD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
+  TH2D * h_phip_Dp_Corr_FD = new TH2D("phip_Dp_Corr_FD","Protons (e,e'p_{FD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
   hist_list.push_back(h_phip_Dp_Corr_FD);
-  TH2D * h_phip_Dp_Corr_CD = new TH2D("phip_Dp_Corr_CD","#Delta p_{p} vs. #phi_{p} (e,e'p_{CD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
+  TH2D * h_phip_Dp_Corr_CD = new TH2D("phip_Dp_Corr_CD","Protons (e,e'p_{CD});#phi_{p}^{#circ};#Delta p_{p} [GeV];Counts",180,-180,180,100,-0.4,0.4);
   hist_list.push_back(h_phip_Dp_Corr_CD);
   
   
   TH1D * h_Delta_Res_Eprime_Corrected = new TH1D("Res_Delta_Eprime_Corrected","#Delta E'/E';#Delta E'/E';Counts",100,-0.05,0.05);
+  hist_list.push_back(h_Delta_Res_Eprime_Corrected);
   TH1D * h_Delta_Res_pMomFD_Corrected = new TH1D("Res_Delta_pMomFD_Corrected","#Delta p/p for FD Protons;#Delta p/p; Counts",100,-0.2,0.2);
+  hist_list.push_back(h_Delta_Res_pMomFD_Corrected);
   TH1D * h_Delta_Res_pMomCD_Corrected = new TH1D("Res_Delta_pMomCD_Corrected","#Delta p/p for CD Protons;#Delta p/p; Counts",100,-0.4,0.4);
+  hist_list.push_back(h_Delta_Res_pMomCD_Corrected);
 
   
   TH1D * h_E_Res[14];
@@ -322,10 +332,11 @@ int main(int argc, char ** argv)
     int min = bE_Theta[i];
     int max = bE_Theta[i+1];
     sprintf(temp_name,"h_E_Res_%d",i);
-    sprintf(temp_title,"Counts vs. #Delta p_{e} (%d< #theta < %d);#Delta p_{e} [GeV];Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#Delta p_{e} [GeV];Counts",min,max);
     h_E_Res[i] = new TH1D(temp_name,temp_title,100,-0.15,0.15);
     sprintf(temp_name,"h_E_Res_%d_Corrected",i);
     h_E_Res_Corrected[i] = new TH1D(temp_name,temp_title,100,-0.15,0.15);
+    hist_list.push_back(h_E_Res_Corrected[i]);
   }
   
   TH1D * h_pFD_Res[9];
@@ -334,10 +345,11 @@ int main(int argc, char ** argv)
     int min = bE_ThetapFD[i];
     int max = bE_ThetapFD[i+1];
     sprintf(temp_name,"h_pFD_Res_%d",i);
-    sprintf(temp_title,"Counts vs. #Delta p FD Protons (%d< #theta < %d);#Delta E';Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#Delta E';Counts",min,max);
     h_pFD_Res[i] = new TH1D(temp_name,temp_title,100,-0.3,0.3);
     sprintf(temp_name,"h_pFD_Res_%d_Corrected",i);
     h_pFD_Res_Corrected[i] = new TH1D(temp_name,temp_title,100,-0.3,0.3);
+    hist_list.push_back(h_pFD_Res_Corrected[i]);
   }
   
   
@@ -348,7 +360,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"phi_corr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction;Counts",j,min,max);
+      sprintf(temp_title,"Sector = %d (%d #circ< #theta < %d #circ);#phi;Correction [GeV];Counts",j,min,max);
       h_phi_corr_binSector_binTheta[j-1][i] = new TH2D(temp_name,temp_title,45,-45,45,100,-0.5,0.5);
       hist_list.push_back(h_phi_corr_binSector_binTheta[j-1][i]);
 
@@ -366,7 +378,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"e_phi_corr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction;Counts",j,min,max);
+      sprintf(temp_title,"Sector = %d (%d #circ< #theta < %d #circ);#phi;Correction [GeV];Counts",j,min,max);
       h_e_phi_corr_binSector_binTheta[j-1][i] = new TH2D(temp_name,temp_title,45,-45,45,100,-0.2,0.2);
       hist_list.push_back(h_e_phi_corr_binSector_binTheta[j-1][i]);
 
@@ -384,7 +396,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"p_phi_corr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction;Counts",j,min,max);
+      sprintf(temp_title,"Sector = %d (%d #circ< #theta < %d #circ);#phi;Correction [GeV];Counts",j,min,max);
       h_p_phi_corr_binSector_binTheta[j-1][i] = new TH2D(temp_name,temp_title,45,-55,35,100,-0.5,0.5);
       hist_list.push_back(h_p_phi_corr_binSector_binTheta[j-1][i]);
 
@@ -402,7 +414,7 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"phi_corr_theta_%d",i);
-    sprintf(temp_title,"Correction vs. #phi (%d< #theta < %d);#phi;Correction;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#phi;Correction [GeV];Counts",min,max);
     h_phi_corr_binThetaCD[i] = new TH2D(temp_name,temp_title,180,-180,180,100,-0.5,0.5);
     hist_list.push_back(h_phi_corr_binThetaCD[i]);
     
@@ -416,7 +428,7 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"aftercorr_phi_corr_theta_%d",i);
-    sprintf(temp_title,"Correction vs. #phi (%d< #theta < %d);#phi;Correction;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#phi;Correction [GeV];Counts",min,max);
     h_aftercorr_phi_corr_binThetaCD[i] = new TH2D(temp_name,temp_title,180,-180,180,100,-0.5,0.5);
     hist_list.push_back(h_aftercorr_phi_corr_binThetaCD[i]);
   }
@@ -428,7 +440,7 @@ int main(int argc, char ** argv)
     int min = bE_MomCD[i]*1000;
     int max = bE_MomCD[i+1]*1000;
     sprintf(temp_name,"phi_corr_mom_%d",i);
-    sprintf(temp_title,"Correction vs. #phi (%d< p < %d);#phi;Correction;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< p < %d #circ);#phi;Correction [GeV];Counts",min,max);
     h_phi_corr_binMomCD[i] = new TH2D(temp_name,temp_title,180,-180,180,100,-0.5,0.5);
     hist_list.push_back(h_phi_corr_binMomCD[i]);
     
@@ -439,6 +451,14 @@ int main(int argc, char ** argv)
   
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->Sumw2();
+    hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
+    hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
     hist_list[i]->GetXaxis()->CenterTitle();
     hist_list[i]->GetYaxis()->CenterTitle();
   }
@@ -622,6 +642,13 @@ int main(int argc, char ** argv)
   for(int j=1; j<=6; j++){
     //g_omega_diff_mu_sectors[j-1]->Write();
   }
+
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+  
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -660,30 +687,42 @@ int main(int argc, char ** argv)
   */
 
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->Divide(1,1,0,0);
+  auto pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.21);
   h_Delta_Int_Eprime_beforeRad->Draw();
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.21);
   h_Delta_Int_pMomFD->Draw();
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.21);
   h_Delta_Int_pMomCD->Draw();
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  g_rad_new->GetXaxis()->CenterTitle();
+  g_rad_new->GetXaxis()->SetTitleSize(0.10);
+  g_rad_new->GetXaxis()->SetLabelSize(0.06);
+  g_rad_new->GetXaxis()->SetTitleOffset(0.8);
+  g_rad_new->GetYaxis()->CenterTitle();
+  g_rad_new->GetYaxis()->SetTitleSize(0.10);
+  g_rad_new->GetYaxis()->SetLabelSize(0.06);
+  g_rad_new->GetYaxis()->SetTitleOffset(0.8);
   g_rad_new->Draw();
   f_rad_new->Draw("SAME");
   text.DrawLatex(11,22,"#Delta E' = A + B #theta + C #theta^2");
@@ -693,25 +732,30 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.21);
   h_Delta_Int_Eprime->Draw();
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,2);
+  myCanvas->Divide(2,2,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.21);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_phie_Dp_FD->Draw("colz");
   myCanvas->cd(2);
-  myCanvas->GetPad(2)->SetLeftMargin(0.15);
+  myCanvas->GetPad(2)->SetBottomMargin(0.21);
+  myCanvas->GetPad(2)->SetLeftMargin(0.19);
   h_phip_Dp_FD->Draw("colz");
   myCanvas->cd(3);
-  myCanvas->GetPad(3)->SetLeftMargin(0.15);
+  myCanvas->GetPad(3)->SetBottomMargin(0.21);
+  myCanvas->GetPad(3)->SetLeftMargin(0.19);
   h_phie_Dp_CD->Draw("colz");
   myCanvas->cd(4);
-  myCanvas->GetPad(4)->SetLeftMargin(0.15);
+  myCanvas->GetPad(4)->SetBottomMargin(0.21);
+  myCanvas->GetPad(4)->SetLeftMargin(0.19);
   h_phip_Dp_CD->Draw("colz");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
@@ -736,7 +780,7 @@ int main(int argc, char ** argv)
   TGraph * g_sigma = new TGraph;
   TGraph * g_mode_corr = new TGraph;
   TGraph * g_sigma_corr = new TGraph;
-  myCanvas->Divide(3,4);
+  myCanvas->Divide(3,4,0,0);
   for(int i = 0; i < 11; i++){
     double mode, sigma, mode_corr, sigma_corr;
     
@@ -746,6 +790,8 @@ int main(int argc, char ** argv)
     getMax(h_E_Res_Corrected[i],f_thetabin_corr,mode_corr,sigma_corr);    
 
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_E_Res_Corrected[i]->SetLineColor(2);
     h_E_Res_Corrected[i]->Draw();
     f_thetabin_corr->SetLineColor(2);
@@ -770,9 +816,18 @@ int main(int argc, char ** argv)
   TGraph * r_ab1 = new TGraph(2,x_ab1,y_ab1);
   r_ab1->SetLineColor(0);
   r_ab1->SetTitle("#mu_{#Delta p_{e}} vs. #theta_{e} (e,e'p);#theta_{e}^{#circ};#mu_{#Delta p_{e}} [MeV]");
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  r_ab1->GetXaxis()->CenterTitle();
+  r_ab1->GetXaxis()->SetTitleSize(0.10);
+  r_ab1->GetXaxis()->SetLabelSize(0.06);
+  r_ab1->GetXaxis()->SetTitleOffset(0.8);
+  r_ab1->GetYaxis()->CenterTitle();
+  r_ab1->GetYaxis()->SetTitleSize(0.10);
+  r_ab1->GetYaxis()->SetLabelSize(0.06);
+  r_ab1->GetYaxis()->SetTitleOffset(0.8);
   r_ab1->Draw();
   g_mode_corr->SetLineColor(2);
   g_mode_corr->Draw("SAME");
@@ -798,76 +853,91 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   */
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_Delta_Int_Eprime_Corrected->SetLineColor(2);
   h_Delta_Int_Eprime_Corrected->Draw();
   h_Delta_Int_Eprime_beforeRad->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_Delta_Int_pMomFD_Corrected->SetLineColor(2);
   h_Delta_Int_pMomFD_Corrected->Draw();
   h_Delta_Int_pMomFD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_Delta_Int_pMomCD_Corrected->SetLineColor(2);
   h_Delta_Int_pMomCD_Corrected->Draw();
   h_Delta_Int_pMomCD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,2);
+  myCanvas->Divide(2,2,0,0);
   myCanvas->cd(1);
-  myCanvas->GetPad(1)->SetLeftMargin(0.15);
+  myCanvas->GetPad(1)->SetBottomMargin(0.21);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_phie_Dp_Corr_FD->Draw("colz");
   myCanvas->cd(2);
-  myCanvas->GetPad(2)->SetLeftMargin(0.15);
+  myCanvas->GetPad(2)->SetBottomMargin(0.21);
+  myCanvas->GetPad(2)->SetLeftMargin(0.19);
   h_phip_Dp_Corr_FD->Draw("colz");
   myCanvas->cd(3);
-  myCanvas->GetPad(3)->SetLeftMargin(0.15);
+  myCanvas->GetPad(3)->SetBottomMargin(0.21);
+  myCanvas->GetPad(3)->SetLeftMargin(0.19);
   h_phie_Dp_Corr_CD->Draw("colz");
   myCanvas->cd(4);
-  myCanvas->GetPad(4)->SetLeftMargin(0.15);
+  myCanvas->GetPad(4)->SetBottomMargin(0.21);
+  myCanvas->GetPad(4)->SetLeftMargin(0.19);
   h_phip_Dp_Corr_CD->Draw("colz");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
   }    
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
   }    
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);    
     h_aftercorr_phi_corr_binThetaCD[i]->Draw("colz");
   }    
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);    
     h_aftercorr_phi_corr_binThetaCD[i]->Draw("colz");
   }    
   myCanvas->Print(fileName,"pdf");

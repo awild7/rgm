@@ -285,6 +285,14 @@ int main(int argc, char ** argv)
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->Sumw2();
     hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
+    hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
+    hist_list[i]->GetXaxis()->CenterTitle();
     hist_list[i]->GetYaxis()->CenterTitle();
   }
 
@@ -363,6 +371,12 @@ int main(int argc, char ** argv)
     hist_list[i]->Write();
   }
 
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -377,25 +391,31 @@ int main(int argc, char ** argv)
 
   //////////////////////////////////////////////////
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_mmissdiffcorrFD->SetLineColor(2);
   h_mmissdiffcorrFD->Draw();
   h_mmissdiffFD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   h_mmissdiffcorrCD->SetLineColor(2);
   h_mmissdiffcorrCD->Draw();
   h_mmissdiffCD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_mmissdiffcorrCD_binThetaCD[i]->SetLineColor(2);
     h_mmissdiffcorrCD_binThetaCD[i]->Draw();
     h_mmissdiffCD_binThetaCD[i]->Draw("SAME");
@@ -403,16 +423,17 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_mmissdiffcorrCD_binThetaCD[i]->SetLineColor(2);
     h_mmissdiffcorrCD_binThetaCD[i]->Draw();
     h_mmissdiffCD_binThetaCD[i]->Draw("SAME");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
-  myCanvas->Divide(3,3);
 
   
   sprintf(fileName,"%s]",pdfFile);

@@ -1,4 +1,4 @@
-foreach(fnameSrc Energy_Loss.cpp Energy_Loss_e.cpp Energy_Loss_CD.cpp Energy_Loss_FD.cpp Energy_Loss_FD_copyEdit.cpp Angular_Correction.cpp Angular_Correction_Hists.cpp Momentum_Correction.cpp Momentum_Correction_Hists.cpp Momentum_Correction_Hists_CD.cpp Momentum_Correction_Deuterium.cpp Efficiency_Resolution.cpp Get_Radiation_Simulation.cpp Efficiency_Resolution_Comp.cpp Resolution.cpp Resolution_Hist.cpp Resolution_Graph.cpp Vertex.cpp Vertex_Graph.cpp Q2.cpp)
+foreach(fnameSrc Energy_Loss.cpp Energy_Loss_e.cpp Energy_Loss_CD.cpp Energy_Loss_FD.cpp Energy_Loss_CD_copyEdit.cpp Energy_Loss_FD_copyEdit.cpp Angular_Correction.cpp Angular_Correction_Hists.cpp Momentum_Correction.cpp Momentum_Correction_Hists.cpp Momentum_Correction_Hists_CD.cpp Momentum_Correction_Deuterium.cpp Efficiency_Resolution.cpp Get_Radiation_Simulation.cpp Efficiency_Resolution_Comp.cpp Resolution.cpp Resolution_Hist.cpp Resolution_Graph.cpp Vertex.cpp Vertex_Graph.cpp Q2.cpp Resolution_CD.cpp)
   message(STATUS ${fnameSRC})
   string (REPLACE ".cpp" "" fnameExe ${fnameSrc})
   add_executable(${fnameExe} ${fnameSrc})

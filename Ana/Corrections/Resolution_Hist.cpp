@@ -177,7 +177,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"ecorr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Resolution Sector %d (%d< #theta < %d);#Delta p/p;Counts",j,min,max);
+      sprintf(temp_title,"Sector=%d (%d #circ< #theta < %d #circ);#Delta p/p;Counts",j,min,max);
       h_Data_e_corr_binSector_binTheta[j-1][i] = (TH1D*)inFileData->Get(temp_name);
       h_Data_e_corr_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_Data_e_corr_binSector_binTheta[j-1][i]);
@@ -190,7 +190,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"pcorr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Resolution Sector %d (%d< #theta < %d);#Delta p/p;Counts",j,min,max);
+      sprintf(temp_title,"Sector=%d (%d #circ< #theta < %d #circ);#Delta p/p;Counts",j,min,max);
       h_Data_p_corr_binSector_binTheta[j-1][i] = (TH1D*)inFileData->Get(temp_name);
       h_Data_p_corr_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_Data_p_corr_binSector_binTheta[j-1][i]);
@@ -202,7 +202,7 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"corr_theta_%d",i);
-    sprintf(temp_title,"Resolution (%d< #theta < %d);#Delta p/p;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#Delta p/p;Counts",min,max);
     h_Data_corr_binThetaCD[i] = (TH1D*)inFileData->Get(temp_name);
     h_Data_corr_binThetaCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_Data_corr_binThetaCD[i]);
@@ -213,7 +213,7 @@ int main(int argc, char ** argv)
     int min = bE_PhiCD[i];
     int max = bE_PhiCD[i+1];
     sprintf(temp_name,"corr_phi_%d",i);
-    sprintf(temp_title,"Resolution (%d< #phi < %d);#Delta p/p;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #phi < %d #circ);#Delta p/p;Counts",min,max);
     h_Data_corr_binPhiCD[i] = (TH1D*)inFileData->Get(temp_name);
     h_Data_corr_binPhiCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_Data_corr_binPhiCD[i]);
@@ -231,7 +231,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"ecorr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Resolution Sector %d (%d< #theta < %d);#Delta p/p;Counts",j,min,max);
+      sprintf(temp_title,"Sector=%d (%d #circ< #theta < %d #circ);#Delta p/p;Counts",j,min,max);
       h_Sim_e_corr_binSector_binTheta[j-1][i] = (TH1D*)inFileSim->Get(temp_name);
       h_Sim_e_corr_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_Sim_e_corr_binSector_binTheta[j-1][i]);
@@ -244,7 +244,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"pcorr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Resolution Sector %d (%d< #theta < %d);#Delta p/p;Counts",j,min,max);
+      sprintf(temp_title,"Sector=%d (%d #circ< #theta < %d #circ);#Delta p/p;Counts",j,min,max);
       h_Sim_p_corr_binSector_binTheta[j-1][i] = (TH1D*)inFileSim->Get(temp_name);
       h_Sim_p_corr_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_Sim_p_corr_binSector_binTheta[j-1][i]);
@@ -256,7 +256,7 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"corr_theta_%d",i);
-    sprintf(temp_title,"Resolution (%d< #theta < %d);#Delta p/p;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#Delta p/p;Counts",min,max);
     h_Sim_corr_binThetaCD[i] = (TH1D*)inFileSim->Get(temp_name);
     h_Sim_corr_binThetaCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_Sim_corr_binThetaCD[i]);
@@ -267,7 +267,7 @@ int main(int argc, char ** argv)
     int min = bE_PhiCD[i];
     int max = bE_PhiCD[i+1];
     sprintf(temp_name,"corr_phi_%d",i);
-    sprintf(temp_title,"Resolution (%d< #phi < %d);#Delta p/p;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #phi < %d #circ);#Delta p/p;Counts",min,max);
     h_Sim_corr_binPhiCD[i] = (TH1D*)inFileSim->Get(temp_name);
     h_Sim_corr_binPhiCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_Sim_corr_binPhiCD[i]);
@@ -284,7 +284,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"ecorr_Smear_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"#Delta p Sector %d (%d< #theta < %d);#Delta p [GeV];Counts",j,min,max);
+      sprintf(temp_title,"Sector=%d (%d #circ< #theta < %d #circ);#Delta p [GeV];Counts",j,min,max);
       h_Sim_e_corr_Smear_binSector_binTheta[j-1][i] = (TH1D*)inFileSim->Get(temp_name);
       h_Sim_e_corr_Smear_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_Sim_e_corr_Smear_binSector_binTheta[j-1][i]);
@@ -297,7 +297,7 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"pcorr_Smear_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Resolution Sector %d (%d< #theta < %d);#Delta p/p;Counts",j,min,max);
+      sprintf(temp_title,"Sector=%d (%d #circ< #theta < %d #circ);#Delta p/p;Counts",j,min,max);
       h_Sim_p_corr_Smear_binSector_binTheta[j-1][i] = (TH1D*)inFileSim->Get(temp_name);
       h_Sim_p_corr_Smear_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_Sim_p_corr_Smear_binSector_binTheta[j-1][i]);
@@ -309,7 +309,7 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"corr_Smear_theta_%d",i);
-    sprintf(temp_title,"Resolution (%d< #theta < %d);#Delta p/p;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#Delta p/p;Counts",min,max);
     h_Sim_corr_Smear_binThetaCD[i] = (TH1D*)inFileSim->Get(temp_name);
     h_Sim_corr_Smear_binThetaCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_Sim_corr_Smear_binThetaCD[i]);
@@ -320,7 +320,7 @@ int main(int argc, char ** argv)
     int min = bE_PhiCD[i];
     int max = bE_PhiCD[i+1];
     sprintf(temp_name,"corr_Smear_phi_%d",i);
-    sprintf(temp_title,"Resolution (%d< #phi < %d);#Delta p/p;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #phi < %d #circ);#Delta p/p;Counts",min,max);
     h_Sim_corr_Smear_binPhiCD[i] = (TH1D*)inFileSim->Get(temp_name);
     h_Sim_corr_Smear_binPhiCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_Sim_corr_Smear_binPhiCD[i]);
@@ -329,12 +329,26 @@ int main(int argc, char ** argv)
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->GetXaxis()->CenterTitle();
     hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
+    hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
   }
 
 
   /////////////////////////////////////////////////////
   //Now create the output PDFs
   /////////////////////////////////////////////////////
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -360,10 +374,12 @@ int main(int argc, char ** argv)
   for(int j = 0; j < 6 ; j++){
     g_Data_e_sigma[j] = new TGraph;
     g_Data_ep_sigma[j] = new TGraph;
-    myCanvas->Divide(3,4);
+    myCanvas->Divide(3,4,0,0);
     for(int i = 0; i < 11; i++){
       myCanvas->cd(i+1);
-      h_Data_e_corr_binSector_binTheta[j][i]->Draw();      
+      myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
+    h_Data_e_corr_binSector_binTheta[j][i]->Draw();      
       TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
       f_thetabin->SetParameter(0,h_Data_e_corr_binSector_binTheta[j][i]->GetMaximum());
       f_thetabin->SetParameter(1,0);
@@ -386,9 +402,11 @@ int main(int argc, char ** argv)
   TGraph * g_Data_p_sigma[6];
   for(int j = 0; j < 6 ; j++){
     g_Data_p_sigma[j] = new TGraph;
-    myCanvas->Divide(3,3);
+    myCanvas->Divide(3,3,0,0);
     for(int i = 7; i < 14; i++){
       myCanvas->cd(i-6);
+      myCanvas->GetPad(i-6)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i-6)->SetLeftMargin(0.19);
       h_Data_p_corr_binSector_binTheta[j][i]->Draw();
       TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
       f_thetabin->SetParameter(0,h_Data_p_corr_binSector_binTheta[j][i]->GetMaximum());
@@ -415,9 +433,11 @@ int main(int argc, char ** argv)
   for(int j = 0; j < 6 ; j++){
     g_Sim_e_sigma[j] = new TGraph;
     g_Sim_ep_sigma[j] = new TGraph;
-    myCanvas->Divide(3,4);
+    myCanvas->Divide(3,4,0,0);
     for(int i = 0; i < 11; i++){
       myCanvas->cd(i+1);
+      myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
       h_Sim_e_corr_binSector_binTheta[j][i]->Draw();      
       TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
       f_thetabin->SetParameter(0,h_Sim_e_corr_binSector_binTheta[j][i]->GetMaximum());
@@ -441,9 +461,11 @@ int main(int argc, char ** argv)
   TGraph * g_Sim_p_sigma[6];
   for(int j = 0; j < 6 ; j++){
     g_Sim_p_sigma[j] = new TGraph;
-    myCanvas->Divide(3,3);
+    myCanvas->Divide(3,3,0,0);
     for(int i = 7; i < 14; i++){
       myCanvas->cd(i-6);
+      myCanvas->GetPad(i-6)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i-6)->SetLeftMargin(0.19);
       h_Sim_p_corr_binSector_binTheta[j][i]->Draw();
       TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
       f_thetabin->SetParameter(0,h_Sim_p_corr_binSector_binTheta[j][i]->GetMaximum());
@@ -469,9 +491,11 @@ int main(int argc, char ** argv)
   for(int j = 0; j < 6 ; j++){
     g_Smear_Sim_e_sigma[j] = new TGraph;
     g_Smear_Sim_ep_sigma[j] = new TGraph;
-    myCanvas->Divide(3,4);
+    myCanvas->Divide(3,4,0,0);
     for(int i = 0; i < 11; i++){
       myCanvas->cd(i+1);
+      myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
       h_Sim_e_corr_Smear_binSector_binTheta[j][i]->Draw();      
       TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
       f_thetabin->SetParameter(0,h_Sim_e_corr_Smear_binSector_binTheta[j][i]->GetMaximum());
@@ -495,9 +519,11 @@ int main(int argc, char ** argv)
   TGraph * g_Smear_Sim_p_sigma[6];
   for(int j = 0; j < 6 ; j++){
     g_Smear_Sim_p_sigma[j] = new TGraph;
-    myCanvas->Divide(3,3);
+    myCanvas->Divide(3,3,0,0);
     for(int i = 7; i < 14; i++){
       myCanvas->cd(i-6);
+      myCanvas->GetPad(i-6)->SetBottomMargin(0.19);
+      myCanvas->GetPad(i-6)->SetLeftMargin(0.19);
       h_Sim_p_corr_Smear_binSector_binTheta[j][i]->Draw();
       TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
       f_thetabin->SetParameter(0,h_Sim_p_corr_Smear_binSector_binTheta[j][i]->GetMaximum());
@@ -660,9 +686,11 @@ int main(int argc, char ** argv)
   //////////////////////////////////////
   
   TGraph * g_Data_sigma_CD = new TGraph;
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_Data_corr_binThetaCD[i]->Draw();    
     TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.15,0.15,3);
     f_thetabin->SetParameter(0,h_Data_corr_binThetaCD[i]->GetMaximum());
@@ -679,9 +707,11 @@ int main(int argc, char ** argv)
   myCanvas->Clear();
 
   TGraph * g_Sim_sigma_CD = new TGraph;
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_Sim_corr_binThetaCD[i]->Draw();
     TF1 * f_thetabin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.15,0.15,3);
     f_thetabin->SetParameter(0,h_Sim_corr_binThetaCD[i]->GetMaximum());
@@ -739,9 +769,11 @@ int main(int argc, char ** argv)
   //////////////////////////////////////
   //////////////////////////////////////
   TGraph * g_Phi_Data_sigma_CD = new TGraph;
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_Data_corr_binPhiCD[i]->Draw();     
     TF1 * f_phibin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.35,0.35,3);
     f_phibin->SetParameter(0,h_Data_corr_binPhiCD[i]->GetMaximum());
@@ -759,9 +791,11 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_Data_corr_binPhiCD[i]->Draw();     
     TF1 * f_phibin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.35,0.35,3);
     f_phibin->SetParameter(0,h_Data_corr_binPhiCD[i]->GetMaximum());
@@ -781,9 +815,11 @@ int main(int argc, char ** argv)
 
   
   TGraph * g_Phi_Sim_sigma_CD = new TGraph;
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_Sim_corr_binPhiCD[i]->Draw();
     TF1 * f_phibin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.35,0.35,3);
     f_phibin->SetParameter(0,h_Sim_corr_binPhiCD[i]->GetMaximum());
@@ -801,9 +837,11 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_Sim_corr_binPhiCD[i]->Draw();
     TF1 * f_phibin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.35,0.35,3);
     f_phibin->SetParameter(0,h_Sim_corr_binPhiCD[i]->GetMaximum());
@@ -822,9 +860,11 @@ int main(int argc, char ** argv)
   myCanvas->Clear();
 
   TGraph * g_Phi_Smear_Sim_sigma_CD = new TGraph;
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 0; i < 9; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_Sim_corr_Smear_binPhiCD[i]->Draw();
     TF1 * f_phibin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.35,0.35,3);
     f_phibin->SetParameter(0,h_Sim_corr_Smear_binPhiCD[i]->GetMaximum());
@@ -842,9 +882,11 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,3);
+  myCanvas->Divide(3,3,0,0);
   for(int i = 9; i < 18; i++){
     myCanvas->cd(i-8);
+    myCanvas->GetPad(i-8)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i-8)->SetLeftMargin(0.19);
     h_Sim_corr_Smear_binPhiCD[i]->Draw();
     TF1 * f_phibin = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.35,0.35,3);
     f_phibin->SetParameter(0,h_Sim_corr_Smear_binPhiCD[i]->GetMaximum());

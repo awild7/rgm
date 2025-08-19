@@ -323,6 +323,12 @@ int main(int argc, char ** argv)
   /////////////////////////////////////////////////////
   //Now create the output PDFs
   /////////////////////////////////////////////////////
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -579,12 +585,24 @@ int main(int argc, char ** argv)
   for(int i = 0; i < 6; i++){
     r_ab1[i]= new TGraph(2,x_ab1,y_ab1);
     r_ab1[i]->SetLineColor(0);
-    sprintf(temp_title,"#sigma_{#Delta p} vs. #theta (e,e'p) Sector %d;#theta^{#circ};#sigma_{#Delta p} [MeV]",i+1);
+    sprintf(temp_title,"(e,e'p) Sector=%d;#theta^{#circ};#sigma_{p}/p [%]",i+1);
     r_ab1[i]->SetTitle(temp_title);
   }
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
+    r_ab1[i]->GetXaxis()->CenterTitle();
+    r_ab1[i]->GetXaxis()->SetTitleSize(0.10);
+    r_ab1[i]->GetXaxis()->SetLabelSize(0.06);
+    r_ab1[i]->GetXaxis()->SetTitleOffset(0.8);
+    r_ab1[i]->GetYaxis()->CenterTitle();
+    r_ab1[i]->GetYaxis()->SetTitleSize(0.10);
+    r_ab1[i]->GetYaxis()->SetLabelSize(0.06);
+    r_ab1[i]->GetYaxis()->SetTitleOffset(0.8);
+    r_ab1[i]->GetXaxis()->CenterTitle();
+    r_ab1[i]->GetYaxis()->CenterTitle();
     r_ab1[i]->Draw();
     g_Data_e_sigma[i]->SetLineWidth(2);
     g_Data_p_sigma[i]->SetLineWidth(2);
@@ -599,9 +617,11 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     r_ab1[i]->Draw();
     g_Sim_e_sigma[i]->SetLineColor(4);
     g_Sim_p_sigma[i]->SetLineColor(4);
@@ -617,21 +637,35 @@ int main(int argc, char ** argv)
   for(int i = 0; i < 6; i++){
     r_abc1[i]= new TGraph(2,x_ab1,y_ab1);
     r_abc1[i]->SetLineColor(0);
-    sprintf(temp_title,"#sqrt{#sigma_{#Delta p,Data}^{2}-#sigma_{#Delta p,Sim}^{2}} vs. #theta (e,e'p) Sector %d;#theta^{#circ};#sqrt{#sigma_{#Delta p,Data}^{2}-#sigma_{#Delta p,Sim}^{2}} [MeV]",i+1);
+    sprintf(temp_title,"(e,e'p) Sector=%d;#theta^{#circ};#sqrt{(#sigma_{p}/p)_{Data}^{2}-(#sigma_{p}/p)_{Sim}^{2}} [%]",i+1);
     r_abc1[i]->SetTitle(temp_title);
   }
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
+    r_abc1[i]->GetXaxis()->CenterTitle();
+    r_abc1[i]->GetXaxis()->SetTitleSize(0.10);
+    r_abc1[i]->GetXaxis()->SetLabelSize(0.06);
+    r_abc1[i]->GetXaxis()->SetTitleOffset(0.8);
+    r_abc1[i]->GetYaxis()->CenterTitle();
+    r_abc1[i]->GetYaxis()->SetTitleSize(0.06);
+    r_abc1[i]->GetYaxis()->SetLabelSize(0.06);
+    r_abc1[i]->GetYaxis()->SetTitleOffset(0.8);
+    r_abc1[i]->GetXaxis()->CenterTitle();
+    r_abc1[i]->GetYaxis()->CenterTitle();
     r_abc1[i]->Draw();
     f_Sup_FDres[i]->Draw("SAME");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     r_ab1[i]->Draw();
     g_Data_e_sigma[i]->Draw("SAME");
     g_Data_p_sigma[i]->Draw("SAME");
@@ -641,9 +675,11 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     r_ab1[i]->Draw();
     g_Data_e_sigma[i]->Draw("SAME");
     g_Data_p_sigma[i]->Draw("SAME");
@@ -700,10 +736,22 @@ int main(int argc, char ** argv)
   double y_ab2[2] = {0,15};  
   TGraph * r_ab2 = new TGraph(2,x_ab2,y_ab2);
   r_ab2->SetLineColor(0);
-  r_ab2->SetTitle("#sigma_{#Delta p} vs. #theta (e,e'p_{CD});#theta^{#circ};#sigma_{#Delta p} [MeV]");
+  r_ab2->SetTitle("#theta (e,e'p_{CD});#theta^{#circ};#sigma_{p}/p [%]");
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  r_ab2->GetXaxis()->CenterTitle();
+  r_ab2->GetXaxis()->SetTitleSize(0.10);
+  r_ab2->GetXaxis()->SetLabelSize(0.06);
+  r_ab2->GetXaxis()->SetTitleOffset(0.8);
+  r_ab2->GetYaxis()->CenterTitle();
+  r_ab2->GetYaxis()->SetTitleSize(0.10);
+  r_ab2->GetYaxis()->SetLabelSize(0.06);
+  r_ab2->GetYaxis()->SetTitleOffset(0.8);
+  r_ab2->GetXaxis()->CenterTitle();
+  r_ab2->GetYaxis()->CenterTitle();
   r_ab2->Draw();
   g_Data_sigma_CD->SetLineWidth(2);
   g_Data_sigma_CD->SetLineColor(2);
@@ -866,12 +914,12 @@ int main(int argc, char ** argv)
   double y_ab3[2] = {0,15};  
   TGraph * r_ab3 = new TGraph(2,x_ab3,y_ab3);
   r_ab3->SetLineColor(0);
-  r_ab3->SetTitle("#sigma_{#Delta p} vs. #phi (e,e'p_{CD});#phi^{#circ};#sigma_{#Delta p} [MeV]");
+  r_ab3->SetTitle("(e,e'p_{CD});#phi^{#circ};#sigma_{p/p} [%]");
 
 
   TGraph * r_abc3 = new TGraph(2,x_ab3,y_ab3);
   r_abc3->SetLineColor(0);
-  r_abc3->SetTitle("#sqrt{#sigma_{#Delta p,Data}^{2}-#sigma_{#Delta p,Sim}^{2}} vs. #phi (e,e'p_{CD});#phi^{#circ};#sqrt{#sigma_{#Delta p,Data}^{2}-#sigma_{#Delta p,Sim}^{2}} [MeV]");
+  r_abc3->SetTitle("(e,e'p_{CD});#phi^{#circ};#sqrt{(#sigma_{p}/p)_{Data}^{2}-(#sigma_{p}/p)_{Sim}^{2}} [%]");
 
   TF1 * f_Data_CD = new TF1("f_Data_CD",[&](double *x, double *p){ return Trig3(x[0],p[0],p[1],p[2],p[3],p[4],p[5],p[6]); },-180,180,7);
   f_Data_CD->SetParLimits(0,4,16);
@@ -892,8 +940,20 @@ int main(int argc, char ** argv)
     f_Sup_CD->SetParameter(i,SmearCD[i]);
   }
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  r_ab3->GetXaxis()->CenterTitle();
+  r_ab3->GetXaxis()->SetTitleSize(0.10);
+  r_ab3->GetXaxis()->SetLabelSize(0.06);
+  r_ab3->GetXaxis()->SetTitleOffset(0.8);
+  r_ab3->GetYaxis()->CenterTitle();
+  r_ab3->GetYaxis()->SetTitleSize(0.10);
+  r_ab3->GetYaxis()->SetLabelSize(0.06);
+  r_ab3->GetYaxis()->SetTitleOffset(0.8);
+  r_ab3->GetXaxis()->CenterTitle();
+  r_ab3->GetYaxis()->CenterTitle();
   r_ab3->Draw();
   g_Phi_Data_sigma_CD->SetLineWidth(2);
   g_Phi_Data_sigma_CD->SetLineColor(2);
@@ -908,16 +968,30 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
+  r_abc3->GetXaxis()->CenterTitle();
+  r_abc3->GetXaxis()->SetTitleSize(0.10);
+  r_abc3->GetXaxis()->SetLabelSize(0.06);
+  r_abc3->GetXaxis()->SetTitleOffset(0.8);
+  r_abc3->GetYaxis()->CenterTitle();
+  r_abc3->GetYaxis()->SetTitleSize(0.06);
+  r_abc3->GetYaxis()->SetLabelSize(0.06);
+  r_abc3->GetYaxis()->SetTitleOffset(0.8);
+  r_abc3->GetXaxis()->CenterTitle();
+  r_abc3->GetYaxis()->CenterTitle();
   r_abc3->Draw();
   f_Sup_CD->SetLineColor(2);
   f_Sup_CD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   r_ab3->Draw();
   g_Phi_Data_sigma_CD->SetLineWidth(2);
   g_Phi_Data_sigma_CD->SetLineColor(2);
@@ -928,8 +1002,10 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
+  myCanvas->Divide(1,1,0,0);
   myCanvas->cd(1);
+  myCanvas->GetPad(1)->SetBottomMargin(0.19);
+  myCanvas->GetPad(1)->SetLeftMargin(0.19);
   r_ab3->Draw();
   g_Phi_Data_sigma_CD->SetLineWidth(2);
   g_Phi_Data_sigma_CD->SetLineColor(2);

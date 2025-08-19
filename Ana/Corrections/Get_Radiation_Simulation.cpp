@@ -257,14 +257,21 @@ int main(int argc, char ** argv)
     int min = bE_Theta[i];
     int max = bE_Theta[i+1];
     sprintf(temp_name,"h_E_Res_%d",i);
-    sprintf(temp_title,"Counts vs. #Delta E' (%d< #theta < %d);#Delta E';Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#Delta E' [GeV];Counts",min,max);
     h_E_Res[i] = new TH1D(temp_name,temp_title,100,-0.15,0.15);
+    hist_list.push_back(h_E_Res[i]);
   }
     
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->Sumw2();
     hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
     hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
   }
 
   int counter = 0;
@@ -377,6 +384,13 @@ int main(int argc, char ** argv)
   for(int j=1; j<=6; j++){
     //g_omega_diff_mu_sectors[j-1]->Write();
   }
+
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -394,7 +408,7 @@ int main(int argc, char ** argv)
   TGraph * g_sigma = new TGraph;
   TGraph * g_mode_corr = new TGraph;
   TGraph * g_sigma_corr = new TGraph;
-  myCanvas->Divide(3,4);
+  myCanvas->Divide(3,4,0,0);
   for(int i = 0; i < 11; i++){
     double mode, sigma, mode_corr, sigma_corr;
     
@@ -403,6 +417,8 @@ int main(int argc, char ** argv)
     getMax(h_E_Res[i],f_thetabin,mode,sigma);
 
     myCanvas->cd(i+1);
+    myCanvas->GetPad(i+1)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i+1)->SetLeftMargin(0.19);
     h_E_Res[i]->SetLineColor(1);
     h_E_Res[i]->Draw();      
     f_thetabin->SetLineColor(1);

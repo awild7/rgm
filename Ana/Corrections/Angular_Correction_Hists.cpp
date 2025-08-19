@@ -11,6 +11,7 @@
 #include <TH1.h>
 #include <TH2.h>
 #include <TGraph.h>
+#include <TGraphErrors.h>
 #include <TLatex.h>
 #include <TChain.h>
 #include <TCanvas.h>
@@ -219,8 +220,9 @@ int main(int argc, char ** argv)
       int min = bE_Theta[i];
       int max = bE_Theta[i+1];
       sprintf(temp_name,"phi_corr_sector_%d_theta_%d",j,i);
-      sprintf(temp_title,"Correction vs. #phi Sector %d (%d< #theta < %d);#phi;Correction;Counts",j,min,max);
+      sprintf(temp_title,"Sector = %d (%d #circ< #theta < %d #circ);#phi;Correction [#circ];Counts",j,min,max);
       h_phi_corr_binSector_binTheta[j-1][i] = (TH2D*)inFile->Get(temp_name);
+      h_phi_corr_binSector_binTheta[j-1][i]->SetTitle(temp_title);
       hist_list.push_back(h_phi_corr_binSector_binTheta[j-1][i]);
 
       g_phi_corr_binSector_binTheta[j-1][i] = new TGraphErrors();
@@ -244,8 +246,9 @@ int main(int argc, char ** argv)
     int min = bE_ThetaCD[i];
     int max = bE_ThetaCD[i+1];
     sprintf(temp_name,"phi_corr_theta_%d",i);
-    sprintf(temp_title,"Correction vs. #phi (%d< #theta < %d);#phi;Correction;Counts",min,max);
+    sprintf(temp_title,"(%d #circ< #theta < %d #circ);#phi;Correction [#circ];Counts",min,max);
     h_phi_corr_binThetaCD[i] = (TH2D*)inFile->Get(temp_name);
+    h_phi_corr_binThetaCD[i]->SetTitle(temp_title);
     hist_list.push_back(h_phi_corr_binThetaCD[i]);
     
     g_phi_corr_binThetaCD[i] = new TGraphErrors();
@@ -264,13 +267,25 @@ int main(int argc, char ** argv)
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->Sumw2();
     hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
     hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
   }
 
   
   /////////////////////////////////////////////////////
   //Now create the output PDFs
   /////////////////////////////////////////////////////
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -288,10 +303,12 @@ int main(int argc, char ** argv)
   char* names[4] = {"C_{a}","C_{b}","C_{c}","C_{d}"};
   for(int j = 0; j < 6; j++){
     TGraph * params[4];
+    TGraphErrors * params_Errors[4];
     TF1 * f_params[4];
     double guess[4];
     for(int k = 0; k < 4; k++){
       params[k] = new TGraph();
+      params_Errors[k] = new TGraphErrors();
       sprintf(temp_name,"params_%d",k);
       f_params[k] = new TF1(temp_name,[&](double *x, double *p){ return ErfFunc(x[0],p[0],p[1],p[2],p[3]);},5,50,4);
       f_params[k]->SetParameter(2,20);
@@ -349,6 +366,8 @@ int main(int argc, char ** argv)
       double x = (bE_Theta[i]+bE_Theta[i+1])/2;
       for(int k = 0; k < 4; k++){
 	params[k]->SetPoint(params[k]->GetN(),x,p_phi_corr_binSector_binTheta[j][i]->Parameter(k));
+	params_Errors[k]->SetPoint(params_Errors[k]->GetN(),x,p_phi_corr_binSector_binTheta[j][i]->Parameter(k));
+	params_Errors[k]->SetPointError(params_Errors[k]->GetN()-1,0,p_phi_corr_binSector_binTheta[j][i]->ParError(k));
 	guess[k]=p_phi_corr_binSector_binTheta[j][i]->Parameter(k);
       }
     }
@@ -363,9 +382,11 @@ int main(int argc, char ** argv)
       }
     }
     //b/b/b/b
-    myCanvas->Divide(4,3);
+    myCanvas->Divide(4,3,0,0);
     for(int i = 0; i < 12; i++){
-      myCanvas->cd(i+1);
+      auto pad = myCanvas->cd(i+1);    
+      pad->SetBottomMargin(0.19);
+      pad->SetLeftMargin(0.19);
       h_phi_corr_binSector_binTheta[j][i]->Draw("colz");
       g_phi_corr_binSector_binTheta[j][i]->SetLineColor(2);
       g_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
@@ -375,22 +396,36 @@ int main(int argc, char ** argv)
     myCanvas->Print(fileName,"pdf");
     myCanvas->Clear();
 
-    myCanvas->Divide(2,2);
+    myCanvas->Divide(2,2,0,0);
     for(int k = 0; k < 4; k++){
-      myCanvas->cd(k+1);      
-      params[k]->SetLineColor(3); 
+      auto pad = myCanvas->cd(k+1);    
+      pad->SetBottomMargin(0.19);
+      pad->SetLeftMargin(0.19);
+      
+      params_Errors[k]->SetLineColor(3); 
       sprintf(temp_title,"%s vs. #theta #circ;#theta #circ;%s",names[k],names[k]);
-      params[k]->SetTitle(temp_title);
-      params[k]->Draw();
+      params_Errors[k]->SetTitle(temp_title);
+      params_Errors[k]->GetXaxis()->CenterTitle();
+      params_Errors[k]->GetXaxis()->SetTitleSize(0.10);
+      params_Errors[k]->GetXaxis()->SetLabelSize(0.06);
+      params_Errors[k]->GetXaxis()->SetTitleOffset(0.8);
+      params_Errors[k]->GetYaxis()->CenterTitle();
+      params_Errors[k]->GetYaxis()->SetTitleSize(0.10);
+      params_Errors[k]->GetYaxis()->SetLabelSize(0.06);
+      params_Errors[k]->GetYaxis()->SetTitleOffset(0.8);
+      params_Errors[k]->Draw();
+      
       f_params[k]->SetLineColor(4);      
       f_params[k]->Draw("SAME");      
     }
     myCanvas->Print(fileName,"pdf");
     myCanvas->Clear();
 
-    myCanvas->Divide(4,3);
+    myCanvas->Divide(4,3,0,0);
     for(int i = 0; i < 12; i++){
-      myCanvas->cd(i+1);
+      auto pad = myCanvas->cd(i+1);    
+      pad->SetBottomMargin(0.19);
+      pad->SetLeftMargin(0.19);
       h_phi_corr_binSector_binTheta[j][i]->Draw("colz");
       g_phi_corr_binSector_binTheta[j][i]->SetLineColor(2);
       g_phi_corr_binSector_binTheta[j][i]->Draw("SAME");
@@ -410,10 +445,12 @@ int main(int argc, char ** argv)
   ///////////////////////////////////
   ///////////////////////////////////
   TGraph * params_CD[3];
+  TGraphErrors * params_CD_Errors[3];
   TF1 * f_params_CD[3];
   TFitResultPtr p_params_CD[3];
   for(int k = 0; k < 3; k++){
     params_CD[k] = new TGraph();
+    params_CD_Errors[k] = new TGraphErrors();
     sprintf(temp_name,"params_CD_%d",k);
     if(k<2){
       f_params_CD[k] = new TF1(temp_name,[&](double *x, double *p){ return FuncThetaDependenceCD(x[0],p[0],p[1]);},30,70,2);
@@ -439,6 +476,8 @@ int main(int argc, char ** argv)
     double x = (bE_ThetaCD[i]+bE_ThetaCD[i+1])/2;
     for(int k = 0; k < 3; k++){
       params_CD[k]->SetPoint(params_CD[k]->GetN(),x,p_phi_corr_binThetaCD[i]->Parameter(k));
+      params_CD_Errors[k]->SetPoint(params_CD_Errors[k]->GetN(),x,p_phi_corr_binThetaCD[i]->Parameter(k));
+      params_CD_Errors[k]->SetPointError(params_CD_Errors[k]->GetN()-1,0,p_phi_corr_binThetaCD[i]->ParError(k));
     }
   }
   
@@ -461,9 +500,11 @@ int main(int argc, char ** argv)
     }
   }
   
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
-    myCanvas->cd(i+1);
+    auto pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
     g_phi_corr_binThetaCD[i]->SetLineColor(2);
     g_phi_corr_binThetaCD[i]->SetLineWidth(1);
@@ -474,22 +515,34 @@ int main(int argc, char ** argv)
   myCanvas->Clear();
 
   char* names_CD[3] = {"C_{a}","C_{b}","C_{c}"};
-  myCanvas->Divide(2,2);
+  myCanvas->Divide(2,2,0,0);
   for(int k = 0; k < 3; k++){
-    myCanvas->cd(k+1);      
+    auto pad = myCanvas->cd(k+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);    
     sprintf(temp_title,"%s vs. #theta #circ;#theta #circ;%s",names_CD[k],names_CD[k]);
     f_params_CD[k]->SetLineColor(4);
     f_params_CD[k]->SetTitle(temp_title);      
+    f_params_CD[k]->GetXaxis()->CenterTitle();
+    f_params_CD[k]->GetXaxis()->SetTitleSize(0.10);
+    f_params_CD[k]->GetXaxis()->SetLabelSize(0.06);
+    f_params_CD[k]->GetXaxis()->SetTitleOffset(0.8);
+    f_params_CD[k]->GetYaxis()->CenterTitle();
+    f_params_CD[k]->GetYaxis()->SetTitleSize(0.10);
+    f_params_CD[k]->GetYaxis()->SetLabelSize(0.06);
+    f_params_CD[k]->GetYaxis()->SetTitleOffset(0.8);
     f_params_CD[k]->Draw();      
-    params_CD[k]->SetLineColor(3);
-    params_CD[k]->Draw("SAME");
+    params_CD_Errors[k]->SetLineColor(3);
+    params_CD_Errors[k]->Draw("SAME");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,3);
+  myCanvas->Divide(2,3,0,0);
   for(int i = 0; i < 6; i++){
-    myCanvas->cd(i+1);
+    auto pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_phi_corr_binThetaCD[i]->Draw("colz");
     g_phi_corr_binThetaCD[i]->Draw("SAME");
     f_phi_corr_Combined_binThetaCD[i]->Draw("SAME");

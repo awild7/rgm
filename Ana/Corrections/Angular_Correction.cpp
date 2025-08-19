@@ -217,30 +217,68 @@ int main(int argc, char ** argv)
   TH1D * h_Delta_Int_pMomCD = new TH1D("Delta_pMomCD","Delta_pMomCD",100,-0.5,0.5);
   TH1D * h_Delta_Int_pMomCD_Corrected = new TH1D("Delta_pMomCD_Corrected","Delta_pMomCD_Corrected",100,-0.5,0.5);
 
-  TH1D * h_PXMiss_FD = new TH1D("PXMiss_FD","Missing p_{X} ep_{FD};p_{X};Counts",100,-0.5,0.5);
-  TH1D * h_PYMiss_FD = new TH1D("PYMiss_FD","Missing p_{Y} ep_{FD};p_{Y};Counts",100,-0.5,0.5);
-  TH1D * h_PZMiss_FD = new TH1D("PZMiss_FD","Missing p_{Z} ep_{FD};p_{Z};Counts",100,-0.5,0.5);
-  TH1D * h_EEMiss_FD = new TH1D("EEMiss_FD","Missing p_{T} ep_{FD};p_{T};Counts",100,-0.5,0.5);
-  TH1D * h_PXMiss_FD_Corrected = new TH1D("PXMiss_FD_Corrected","Missing p_{X} ep_{FD};p_{X};Counts",100,-0.5,0.5);
-  TH1D * h_PYMiss_FD_Corrected = new TH1D("PYMiss_FD_Corrected","Missing p_{Y} ep_{FD};p_{Y};Counts",100,-0.5,0.5);
-  TH1D * h_PZMiss_FD_Corrected = new TH1D("PZMiss_FD_Corrected","Missing p_{Z} ep_{FD};p_{Z};Counts",100,-0.5,0.5);
-  TH1D * h_EEMiss_FD_Corrected = new TH1D("EEMiss_FD_Corrected","Missing p_{T} ep_{FD};p_{T};Counts",100,-0.5,0.5);
+  TH1D * h_PXMiss_FD = new TH1D("PXMiss_FD","Missing p_{X} (e,e'p_{FD});p_{X} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PYMiss_FD = new TH1D("PYMiss_FD","Missing p_{Y} (e,e'p_{FD});p_{Y} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PZMiss_FD = new TH1D("PZMiss_FD","Missing p_{Z} (e,e'p_{FD});p_{Z} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_EEMiss_FD = new TH1D("EEMiss_FD","Missing p_{T} (e,e'p_{FD});p_{T} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PXMiss_FD_Corrected = new TH1D("PXMiss_FD_Corrected","Missing p_{X} (e,e'p_{FD});p_{X} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PYMiss_FD_Corrected = new TH1D("PYMiss_FD_Corrected","Missing p_{Y} (e,e'p_{FD});p_{Y} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PZMiss_FD_Corrected = new TH1D("PZMiss_FD_Corrected","Missing p_{Z} (e,e'p_{FD});p_{Z} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_EEMiss_FD_Corrected = new TH1D("EEMiss_FD_Corrected","Missing p_{T} (e,e'p_{FD});p_{T} [GeV];Counts",100,-0.5,0.5);
+  TH2D * h_PXMiss_FD_Correlation = new TH2D("PXMiss_FD_Correlation","Missing p_{X} (e,e'p_{FD});Uncorrected p_{X} [GeV];Corrected p_{X} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+  TH2D * h_PYMiss_FD_Correlation = new TH2D("PYMiss_FD_Correlation","Missing p_{Y} (e,e'p_{FD});Uncorrected p_{Y} [GeV];Corrected p_{Y} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+  TH2D * h_PZMiss_FD_Correlation = new TH2D("PZMiss_FD_Correlation","Missing p_{Z} (e,e'p_{FD});Uncorrected p_{Z} [GeV];Corrected p_{Z} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+  TH2D * h_EEMiss_FD_Correlation = new TH2D("EEMiss_FD_Correlation","Missing p_{T} (e,e'p_{FD});Uncorrected p_{T} [GeV];Corrected p_{T} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
 
-  TH1D * h_PXMiss_CD = new TH1D("PXMiss_CD",                    "Missing p_{X} ep_{CD};p_{X};Counts",100,-0.5,0.5);
-  TH1D * h_PYMiss_CD = new TH1D("PYMiss_CD",                    "Missing p_{Y} ep_{CD};p_{Y};Counts",100,-0.5,0.5);
-  TH1D * h_PZMiss_CD = new TH1D("PZMiss_CD",                    "Missing p_{Z} ep_{CD};p_{Z};Counts",100,-0.5,0.5);
-  TH1D * h_EEMiss_CD = new TH1D("EEMiss_CD",                    "Missing p_{T} ep_{CD};p_{T};Counts",100,-0.5,0.5);
-  TH1D * h_PXMiss_CD_Corrected = new TH1D("PXMiss_CD_Corrected","Missing p_{X} ep_{CD};p_{X};Counts",100,-0.5,0.5);
-  TH1D * h_PYMiss_CD_Corrected = new TH1D("PYMiss_CD_Corrected","Missing p_{Y} ep_{CD};p_{Y};Counts",100,-0.5,0.5);
-  TH1D * h_PZMiss_CD_Corrected = new TH1D("PZMiss_CD_Corrected","Missing p_{Z} ep_{CD};p_{Z};Counts",100,-0.5,0.5);
-  TH1D * h_EEMiss_CD_Corrected = new TH1D("EEMiss_CD_Corrected","Missing p_{T} ep_{CD};p_{T};Counts",100,-0.5,0.5);
-
+  hist_list.push_back(h_PXMiss_FD);
+  hist_list.push_back(h_PYMiss_FD);
+  hist_list.push_back(h_PZMiss_FD);
+  hist_list.push_back(h_EEMiss_FD);
+  hist_list.push_back(h_PXMiss_FD_Corrected);
+  hist_list.push_back(h_PYMiss_FD_Corrected);
+  hist_list.push_back(h_PZMiss_FD_Corrected);
+  hist_list.push_back(h_EEMiss_FD_Corrected);
+  hist_list.push_back(h_PXMiss_FD_Correlation);
+  hist_list.push_back(h_PYMiss_FD_Correlation);
+  hist_list.push_back(h_PZMiss_FD_Correlation);
+  hist_list.push_back(h_EEMiss_FD_Correlation);
 
   
-  TH1D * h_Delta_Eprime_Int_FD = new TH1D("Delta_Eprime_Int_FD","#Delta E' (e,e'p_{FD});#Delta E';Counts",100,-0.4,0.4);
+  TH1D * h_PXMiss_CD = new TH1D("PXMiss_CD",                    "Missing p_{X} (e,e'p_{CD});p_{X} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PYMiss_CD = new TH1D("PYMiss_CD",                    "Missing p_{Y} (e,e'p_{CD});p_{Y} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PZMiss_CD = new TH1D("PZMiss_CD",                    "Missing p_{Z} (e,e'p_{CD});p_{Z} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_EEMiss_CD = new TH1D("EEMiss_CD",                    "Missing p_{T} (e,e'p_{CD});p_{T} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PXMiss_CD_Corrected = new TH1D("PXMiss_CD_Corrected","Missing p_{X} (e,e'p_{CD});p_{X} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PYMiss_CD_Corrected = new TH1D("PYMiss_CD_Corrected","Missing p_{Y} (e,e'p_{CD});p_{Y} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_PZMiss_CD_Corrected = new TH1D("PZMiss_CD_Corrected","Missing p_{Z} (e,e'p_{CD});p_{Z} [GeV];Counts",100,-0.5,0.5);
+  TH1D * h_EEMiss_CD_Corrected = new TH1D("EEMiss_CD_Corrected","Missing p_{T} (e,e'p_{CD});p_{T} [GeV];Counts",100,-0.5,0.5);
+  TH2D * h_PXMiss_CD_Correlation = new TH2D("PXMiss_CD_Correlation","Missing p_{X} (e,e'p_{CD});Uncorrected p_{X} [GeV];Corrected p_{X} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+  TH2D * h_PYMiss_CD_Correlation = new TH2D("PYMiss_CD_Correlation","Missing p_{Y} (e,e'p_{CD});Uncorrected p_{Y} [GeV];Corrected p_{Y} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+  TH2D * h_PZMiss_CD_Correlation = new TH2D("PZMiss_CD_Correlation","Missing p_{Z} (e,e'p_{CD});Uncorrected p_{Z} [GeV];Corrected p_{Z} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+  TH2D * h_EEMiss_CD_Correlation = new TH2D("EEMiss_CD_Correlation","Missing p_{T} (e,e'p_{CD});Uncorrected p_{T} [GeV];Corrected p_{T} [GeV];Counts",500,-0.5,0.5,500,-0.5,0.5);
+
+  hist_list.push_back(h_PXMiss_CD);
+  hist_list.push_back(h_PYMiss_CD);
+  hist_list.push_back(h_PZMiss_CD);
+  hist_list.push_back(h_EEMiss_CD);
+  hist_list.push_back(h_PXMiss_CD_Corrected);
+  hist_list.push_back(h_PYMiss_CD_Corrected);
+  hist_list.push_back(h_PZMiss_CD_Corrected);
+  hist_list.push_back(h_EEMiss_CD_Corrected);
+  hist_list.push_back(h_PXMiss_CD_Correlation);
+  hist_list.push_back(h_PYMiss_CD_Correlation);
+  hist_list.push_back(h_PZMiss_CD_Correlation);
+  hist_list.push_back(h_EEMiss_CD_Correlation);
+
+  
+  TH1D * h_Delta_Eprime_Int_FD = new TH1D("Delta_Eprime_Int_FD","#Delta E' (e,e'p_{FD});#Delta E' [GeV];Counts",100,-0.4,0.4);
   hist_list.push_back(h_Delta_Eprime_Int_FD);
-  TH1D * h_Delta_Eprime_Int_CD = new TH1D("Delta_Eprime_Int_CD","#Delta E' (e,e'p_{CD});#Delta E';Counts",100,-0.4,0.4);
+  TH1D * h_Delta_Eprime_Int_CD = new TH1D("Delta_Eprime_Int_CD","#Delta E' (e,e'p_{CD});#Delta E' [GeV];Counts",100,-0.4,0.4);
   hist_list.push_back(h_Delta_Eprime_Int_CD);
+  TH1D * h_phi_diff_beforeCut_Int_FD = new TH1D("phi_diff_beforeCut_Int_FD","#Delta #phi (e,e'p_{FD});#Delta #phi';Counts",100,-10,10);
+  hist_list.push_back(h_phi_diff_beforeCut_Int_FD);
+  TH1D * h_phi_diff_beforeCut_Int_CD = new TH1D("phi_diff_beforeCut_Int_CD","#Delta #phi (e,e'p_{CD});#Delta #phi';Counts",100,-10,10);
+  hist_list.push_back(h_phi_diff_beforeCut_Int_CD);
   TH1D * h_phi_diff_Int_FD = new TH1D("phi_diff_Int_FD","#Delta #phi (e,e'p_{FD});#Delta #phi';Counts",100,-10,10);
   hist_list.push_back(h_phi_diff_Int_FD);
   TH1D * h_phi_diff_Int_CD = new TH1D("phi_diff_Int_CD","#Delta #phi (e,e'p_{CD});#Delta #phi';Counts",100,-10,10);
@@ -322,9 +360,9 @@ int main(int argc, char ** argv)
   hist_list.push_back(h_EbeamRatFD);
   TH1D * h_EbeamRatCD = new TH1D("EbeamRatCD","E_{0}/E_{beam} (e,e'p_{CD});E_{0}/E_{beam};Counts",100,0.9,1.1);
   hist_list.push_back(h_EbeamRatCD);
-  TH1D * h_EbeamRatCorrFD = new TH1D("EbeamRatCorrFD","E_{0}/E_{beam} Corrected (e,e'p_{FD});E_{0}/E_{beam};Counts",100,0.9,1.1);
+  TH1D * h_EbeamRatCorrFD = new TH1D("EbeamRatCorrFD","E_{0}/E_{beam} (e,e'p_{FD});E_{0}/E_{beam};Counts",100,0.9,1.1);
   hist_list.push_back(h_EbeamRatCorrFD);
-  TH1D * h_EbeamRatCorrCD = new TH1D("EbeamRatCorrCD","E_{0}/E_{beam} Corrected (e,e'p_{CD});E_{0}/E_{beam};Counts",100,0.9,1.1);
+  TH1D * h_EbeamRatCorrCD = new TH1D("EbeamRatCorrCD","E_{0}/E_{beam} (e,e'p_{CD});E_{0}/E_{beam};Counts",100,0.9,1.1);
   hist_list.push_back(h_EbeamRatCorrCD);
 
 
@@ -456,23 +494,23 @@ int main(int argc, char ** argv)
   TH2D * h_phi_theta_COMB_binSector[6];
   for(int j=1; j<=6; j++){
     sprintf(temp_name,"phi_theta_eFD_sector_%d",j);
-    sprintf(temp_title,"#theta_{e} vs. #phi_{e} (e,e'p_{FD}) Sector_{e} %d;#phi;#theta;Counts",j);
-    h_phi_theta_eFD_binSector[j-1] = new TH2D(temp_name,temp_title,100,-40,40,100,5,45);
+    sprintf(temp_title,"Electrons (e,e'p_{FD}) Sector %d;#phi;#theta;Counts",j);
+    h_phi_theta_eFD_binSector[j-1] = new TH2D(temp_name,temp_title,100,-45,45,100,5,45);
     hist_list.push_back(h_phi_theta_eFD_binSector[j-1]);
     
     sprintf(temp_name,"phi_theta_eCD_sector_%d",j);
-    sprintf(temp_title,"#theta_e vs. #phi_e (e,e'p_{CD}) Sector_{e} %d;#phi;#theta;Counts",j);
-    h_phi_theta_eCD_binSector[j-1] = new TH2D(temp_name,temp_title,100,-40,40,100,5,45);
+    sprintf(temp_title,"Electrons (e,e'p_{CD}) Sector %d;#phi;#theta;Counts",j);
+    h_phi_theta_eCD_binSector[j-1] = new TH2D(temp_name,temp_title,100,-45,45,100,5,45);
     hist_list.push_back(h_phi_theta_eCD_binSector[j-1]);
 
     sprintf(temp_name,"phi_theta_pFD_sector_%d",j);
-    sprintf(temp_title,"#theta_{p} vs. #phi_{p} (e,e'p_{FD}) Sector_{p} %d;#phi;#theta;Counts",j);
-    h_phi_theta_pFD_binSector[j-1] = new TH2D(temp_name,temp_title,100,-40,40,100,5,45);
+    sprintf(temp_title,"Protons (e,e'p_{FD}) Sector %d;#phi;#theta;Counts",j);
+    h_phi_theta_pFD_binSector[j-1] = new TH2D(temp_name,temp_title,100,-45,45,100,5,45);
     hist_list.push_back(h_phi_theta_pFD_binSector[j-1]);
 
     sprintf(temp_name,"phi_theta_COMB_sector_%d",j);
-    sprintf(temp_title,"#theta vs. #phi Combined Sector %d;#phi;#theta;Counts",j);
-    h_phi_theta_COMB_binSector[j-1] = new TH2D(temp_name,temp_title,100,-40,40,100,5,45);
+    sprintf(temp_title,"Combined Sector %d;#phi;#theta;Counts",j);
+    h_phi_theta_COMB_binSector[j-1] = new TH2D(temp_name,temp_title,100,-45,45,100,5,45);
     hist_list.push_back(h_phi_theta_COMB_binSector[j-1]);
   }
 
@@ -546,13 +584,21 @@ int main(int argc, char ** argv)
   
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->Sumw2();
+    //hist_list[i]->SetTitleFont(0.12);    
     hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetXaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetXaxis()->SetTitleOffset(0.8);
     hist_list[i]->GetYaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->SetTitleSize(0.10);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list[i]->GetYaxis()->SetTitleOffset(0.8);
+    
   }
 
   int counter = 0;
   //while(chain.Next())
-  while(chain.Next() && (counter<100000000))
+  while(chain.Next() && (counter<10000000000))
     {
       double wep = 1;
       double wepp = 1;
@@ -654,14 +700,21 @@ int main(int argc, char ** argv)
 
 	  if(protons[0]->getRegion()==FD){
 	    h_Delta_Eprime_Int_FD->Fill(Delta_Eprime,wep);
-	    h_phi_diff_Int_FD->Fill(Delta_phi,wep);
+	    h_phi_diff_beforeCut_Int_FD->Fill(Delta_phi,wep);
 	  }
 	  else if(protons[0]->getRegion()==CD){
 	    h_Delta_Eprime_Int_CD->Fill(Delta_Eprime,wep);
-	    h_phi_diff_Int_CD->Fill(Delta_phi,wep);
+	    h_phi_diff_beforeCut_Int_CD->Fill(Delta_phi,wep);
 	  }
 	  
 	  if(fabs(Delta_Eprime)>0.15){continue;}
+
+	  if(protons[0]->getRegion()==FD){
+	    h_phi_diff_Int_FD->Fill(Delta_phi,wep);
+	  }
+	  else if(protons[0]->getRegion()==CD){
+	    h_phi_diff_Int_CD->Fill(Delta_phi,wep);
+	  }
 	  
 	  TLorentzVector miss_ptr = beam + stationary_proton_ptr - el - proton_ptr;
 	  TLorentzVector miss_ptr_corrected = beam + stationary_proton_ptr - el_corrected - proton_ptr_corrected;
@@ -711,6 +764,11 @@ int main(int argc, char ** argv)
 	      h_PYMiss_FD_Corrected->Fill(miss_ptr_corrected.Y(),wep);
 	      h_PZMiss_FD_Corrected->Fill(miss_ptr_corrected.Z(),wep);
 	      h_EEMiss_FD_Corrected->Fill(miss_ptr_corrected.E(),wep);
+
+	      h_PXMiss_FD_Correlation->Fill(miss_ptr.X(),miss_ptr_corrected.X(),wep);
+	      h_PYMiss_FD_Correlation->Fill(miss_ptr.Y(),miss_ptr_corrected.Y(),wep);
+	      h_PZMiss_FD_Correlation->Fill(miss_ptr.Z(),miss_ptr_corrected.Z(),wep);
+	      h_EEMiss_FD_Correlation->Fill(miss_ptr.E(),miss_ptr_corrected.E(),wep);
 	      
 	    }
 	    else if(protons[0]->getRegion()==CD){
@@ -728,6 +786,10 @@ int main(int argc, char ** argv)
 	      h_PZMiss_CD_Corrected->Fill(miss_ptr_corrected.Z(),wep);
 	      h_EEMiss_CD_Corrected->Fill(miss_ptr_corrected.E(),wep);
 
+	      h_PXMiss_CD_Correlation->Fill(miss_ptr.X(),miss_ptr_corrected.X(),wep);
+	      h_PYMiss_CD_Correlation->Fill(miss_ptr.Y(),miss_ptr_corrected.Y(),wep);
+	      h_PZMiss_CD_Correlation->Fill(miss_ptr.Z(),miss_ptr_corrected.Z(),wep);
+	      h_EEMiss_CD_Correlation->Fill(miss_ptr.E(),miss_ptr_corrected.E(),wep);
 	    }
 	    //cout<<"b\n";
 	    
@@ -826,6 +888,13 @@ int main(int argc, char ** argv)
   for(int j=1; j<=6; j++){
     //g_omega_diff_mu_sectors[j-1]->Write();
   }
+
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.07, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -927,8 +996,10 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   */
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  auto pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_Delta_Eprime_Int_FD->Draw();
   TLine *line1 = new TLine(-0.15,0,-0.15,h_Delta_Eprime_Int_FD->GetMaximum());
   line1->SetLineColor(3);
@@ -939,8 +1010,10 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_Delta_Eprime_Int_CD->Draw();
   TLine *lineCD1 = new TLine(-0.15,0,-0.15,h_Delta_Eprime_Int_CD->GetMaximum());
   lineCD1->SetLineColor(3);
@@ -951,8 +1024,10 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phi_diff_Int_FD->Draw();
   TLine *linephiFD1 = new TLine(-3,0,-3,h_phi_diff_Int_FD->GetMaximum());
   linephiFD1->SetLineColor(3);
@@ -963,8 +1038,10 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phi_diff_Int_CD->Draw();
   TLine *linephiCD1 = new TLine(-3,0,-3,h_phi_diff_Int_CD->GetMaximum());
   linephiCD1->SetLineColor(3);
@@ -975,152 +1052,277 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_EbeamRatFD->Draw();
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_EbeamRatCD->Draw();
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,2);
-  myCanvas->cd(1);
+  myCanvas->Divide(2,2,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phie_EbeamRat_FD->Draw("colz");
-  myCanvas->cd(2);
+  pad = myCanvas->cd(2);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phip_EbeamRat_FD->Draw("colz");
-  myCanvas->cd(3);
+  pad = myCanvas->cd(3);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phie_EbeamRat_CD->Draw("colz");
-  myCanvas->cd(4);
+  pad = myCanvas->cd(4);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phip_EbeamRat_CD->Draw("colz");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,2);
-  myCanvas->cd(1);
+  myCanvas->Divide(2,2,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_thetae_EbeamRat_FD->Draw("colz");
-  myCanvas->cd(2);
+  pad = myCanvas->cd(2);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_thetap_EbeamRat_FD->Draw("colz");
-  myCanvas->cd(3);
+  pad = myCanvas->cd(3);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_thetae_EbeamRat_CD->Draw("colz");
-  myCanvas->cd(4);
+  pad = myCanvas->cd(4);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_thetap_EbeamRat_CD->Draw("colz");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   
   TF1 * fTT = new TF1("fTT",[&](double *x, double *p){ return ThetaP(x[0]); },1,50,0);
   
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);  
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_thetae_thetap_FD->Draw("colz");
   fTT->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_thetae_thetap_CD->Draw("colz");
   fTT->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,2);
+  myCanvas->Divide(3,2,0,0);
   for(int i = 0; i < 6; i++){
-    myCanvas->cd(i+1);
+    pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_phi_theta_eFD_binSector[i]->Draw("colz");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,2);
+  myCanvas->Divide(3,2,0,0);
   for(int i = 0; i < 6; i++){
-    myCanvas->cd(i+1);
+    pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_phi_theta_pFD_binSector[i]->Draw("colz");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,2);
+  myCanvas->Divide(3,2,0,0);
   for(int i = 0; i < 6; i++){
-    myCanvas->cd(i+1);
+    pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_phi_theta_eCD_binSector[i]->Draw("colz");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(3,2);
+  myCanvas->Divide(3,2,0,0);
   for(int i = 0; i < 6; i++){
-    myCanvas->cd(i+1);
+    pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_phi_theta_COMB_binSector[i]->Draw("colz");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_phi_theta_pCD->Draw("colz");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_EbeamRatCorrFD->SetLineColor(2);
   h_EbeamRatCorrFD->Draw();
   h_EbeamRatFD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
   
-  myCanvas->Divide(1,1);
-  myCanvas->cd(1);
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_EbeamRatCorrCD->SetLineColor(2);
   h_EbeamRatCorrCD->Draw();
   h_EbeamRatCD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,2);
-  myCanvas->cd(1);
+  myCanvas->Divide(2,2,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_PXMiss_FD_Corrected->SetLineColor(2);
   h_PXMiss_FD_Corrected->Draw();
   h_PXMiss_FD->Draw("SAME");
-  myCanvas->cd(2);
+  pad = myCanvas->cd(2);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_PYMiss_FD_Corrected->SetLineColor(2);
   h_PYMiss_FD_Corrected->Draw();
   h_PYMiss_FD->Draw("SAME");
-  myCanvas->cd(3);
+  pad = myCanvas->cd(3);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_PZMiss_FD_Corrected->SetLineColor(2);
   h_PZMiss_FD_Corrected->Draw();
   h_PZMiss_FD->Draw("SAME");
-  myCanvas->cd(4);
+  pad = myCanvas->cd(4);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_EEMiss_FD_Corrected->SetLineColor(2);
   h_EEMiss_FD_Corrected->Draw();
   h_EEMiss_FD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
-  myCanvas->Divide(2,2);
-  myCanvas->cd(1);
+  myCanvas->Divide(2,2,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_PXMiss_CD_Corrected->SetLineColor(2);
   h_PXMiss_CD_Corrected->Draw();
   h_PXMiss_CD->Draw("SAME");
-  myCanvas->cd(2);
+  pad = myCanvas->cd(2);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_PYMiss_CD_Corrected->SetLineColor(2);
   h_PYMiss_CD_Corrected->Draw();
   h_PYMiss_CD->Draw("SAME");
-  myCanvas->cd(3);
+  pad = myCanvas->cd(3);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_PZMiss_CD_Corrected->SetLineColor(2);
   h_PZMiss_CD_Corrected->Draw();
   h_PZMiss_CD->Draw("SAME");
-  myCanvas->cd(4);
+  pad = myCanvas->cd(4);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
   h_EEMiss_CD_Corrected->SetLineColor(2);
   h_EEMiss_CD_Corrected->Draw();
   h_EEMiss_CD->Draw("SAME");
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();
 
+
+  myCanvas->Divide(2,2,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_PXMiss_FD_Correlation->Draw("colz");
+  pad = myCanvas->cd(2);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_PYMiss_FD_Correlation->Draw("colz");
+  pad = myCanvas->cd(3);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_PZMiss_FD_Correlation->Draw("colz");
+  pad = myCanvas->cd(4);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_EEMiss_FD_Correlation->Draw("colz");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  myCanvas->Divide(2,2,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_PXMiss_CD_Correlation->Draw("colz");
+  pad = myCanvas->cd(2);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_PYMiss_CD_Correlation->Draw("colz");
+  pad = myCanvas->cd(3);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_PZMiss_CD_Correlation->Draw("colz");
+  pad = myCanvas->cd(4);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_EEMiss_CD_Correlation->Draw("colz");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_phi_diff_beforeCut_Int_FD->Draw();
+  //TLine *linephiFD1 = new TLine(-3,0,-3,h_phi_diff_beforeCut_Int_FD->GetMaximum());
+  //linephiFD1->SetLineColor(3);
+  linephiFD1->Draw("SAME");
+  //TLine *linephiFD2 = new TLine(3,0,3,h_phi_diff_beforeCut_Int_FD->GetMaximum());
+  //linephiFD2->SetLineColor(3);
+  linephiFD2->Draw("SAME");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  myCanvas->Divide(1,1,0,0);
+  pad = myCanvas->cd(1);    
+  pad->SetBottomMargin(0.19);
+  pad->SetLeftMargin(0.19);
+  h_phi_diff_beforeCut_Int_CD->Draw();
+  //TLine *linephiCD1 = new TLine(-3,0,-3,h_phi_diff_beforeCut_Int_CD->GetMaximum());
+  //linephiCD1->SetLineColor(3);
+  linephiCD1->Draw("SAME");
+  //TLine *linephiCD2 = new TLine(3,0,3,h_phi_diff_beforeCut_Int_CD->GetMaximum());
+  //linephiCD2->SetLineColor(3);
+  linephiCD2->Draw("SAME");
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();
+
+  
   /*
   myCanvas->Divide(1,1);
   myCanvas->cd(1);

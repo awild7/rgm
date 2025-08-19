@@ -142,7 +142,13 @@ void getFunctionMomTFRP(TH2D * h_myhist, TGraphErrors * g_mygraph, TF1 * f_myfun
       
 }
 
-void getABC(TH2D * h_myhist[16], TGraphErrors * g_mygraph[16], TF1 * f_myfunc[16], TFitResultPtr p_mypoint[16], double min, double max, TGraph * g_Pargraph[3], TF1 * f_Parfunc[3], TFitResultPtr p_Parpoint[3], TF1 * f_Combfunc[16], TCanvas * myCanvas, char fileName[100]){
+void getABC(TH2D * h_myhist[16], TGraphErrors * g_mygraph[16], TF1 * f_myfunc[16], TFitResultPtr p_mypoint[16], double min, double max, TGraphErrors * g_Pargraph[3], TF1 * f_Parfunc[3], TFitResultPtr p_Parpoint[3], TF1 * f_Combfunc[16], TCanvas * myCanvas, char fileName[100]){
+
+  TGraphErrors * g_Pargraph_clone[3];
+  for(int j=0; j<3; j++){
+    g_Pargraph_clone[j]=(TGraphErrors*)g_Pargraph[j]->Clone("clone");
+    g_Pargraph_clone[j]->SetLineColor(3);
+  }
   
   for(int i=0; i<16; i++){
     double theta = 4.25 + i*2.5;
@@ -150,6 +156,10 @@ void getABC(TH2D * h_myhist[16], TGraphErrors * g_mygraph[16], TF1 * f_myfunc[16
     for(int j=0; j<3; j++){
       if(p_mypoint[i]!=-1){
 	g_Pargraph[j]->SetPoint(g_Pargraph[j]->GetN(),theta,p_mypoint[i]->Parameter(j));
+	//g_Pargraph[j]->SetPointError(g_Pargraph[j]->GetN()-1,0,p_mypoint[i]->ParError(j));
+
+	g_Pargraph_clone[j]->SetPoint(g_Pargraph_clone[j]->GetN(),theta,p_mypoint[i]->Parameter(j));
+	g_Pargraph_clone[j]->SetPointError(g_Pargraph_clone[j]->GetN()-1,0,p_mypoint[i]->ParError(j));
       }
     }
   }
@@ -181,26 +191,45 @@ void getABC(TH2D * h_myhist[16], TGraphErrors * g_mygraph[16], TF1 * f_myfunc[16
   }
   
 
-  myCanvas->Divide(3,4);
+  //myStyle->SetPadLeftMargin(1.11);
+  //myStyle->SetTitleOffset(1.2);
+  //myStyle->SetLabelFont(1182, "xyz"); // size of axis values
+  //myStyle->SetNdivisions(4, "xyz");
+  //myCanvas->SetBottomMargin(1.1);
+  //myCanvas->SetLeftMargin(0.7);
+
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.10, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
+  myCanvas->Divide(4,4,0,0);
   for(int i=1; i<15; i++){
-    myCanvas->cd(i);    
+    auto pad = myCanvas->cd(i);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_myhist[i]->Draw("colz");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();  
   
-  myCanvas->Divide(3,4);
+  myCanvas->Divide(4,4,0,0);
   for(int i=1; i<15; i++){
-    myCanvas->cd(i);    
+    auto pad = myCanvas->cd(i);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_myhist[i]->Draw("colz");
     g_mygraph[i]->Draw("SAME");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();  
   
-  myCanvas->Divide(3,4);
+  myCanvas->Divide(4,4,0,0);
   for(int i=1; i<15; i++){
-    myCanvas->cd(i);    
+    auto pad = myCanvas->cd(i);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_myhist[i]->Draw("colz");
     g_mygraph[i]->Draw("SAME");
     f_myfunc[i]->Draw("SAME");
@@ -208,9 +237,11 @@ void getABC(TH2D * h_myhist[16], TGraphErrors * g_mygraph[16], TF1 * f_myfunc[16
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();  
   
-  myCanvas->Divide(3,4);
+  myCanvas->Divide(4,4,0,0);
   for(int i=1; i<15; i++){
-    myCanvas->cd(i);    
+    auto pad = myCanvas->cd(i);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     h_myhist[i]->Draw("colz");
     g_mygraph[i]->Draw("SAME");
     //f_myfunc[i]->Draw("SAME");
@@ -220,26 +251,31 @@ void getABC(TH2D * h_myhist[16], TGraphErrors * g_mygraph[16], TF1 * f_myfunc[16
   myCanvas->Clear();  
 
 
-  myCanvas->Divide(2,2);
+  myCanvas->Divide(2,2,0,0);
   char temp_title[100];
   char* names[3] = {"C_{a}","C_{b}","C_{c}"};
   for(int j=0; j<3; j++){
+    auto pad = myCanvas->cd(j+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     myCanvas->cd(j+1);
     sprintf(temp_title,"%s vs. #theta #circ;#theta #circ;%s",names[j],names[j]);
+    g_Pargraph[j]->GetXaxis()->CenterTitle();
     g_Pargraph[j]->GetXaxis()->SetTitleSize(0.07);
-    g_Pargraph[j]->GetXaxis()->SetTitleOffset(0.6);
+    g_Pargraph[j]->GetXaxis()->SetTitleOffset(1.2);
+    g_Pargraph[j]->GetYaxis()->CenterTitle();
     g_Pargraph[j]->GetYaxis()->SetTitleSize(0.07);
-    g_Pargraph[j]->GetYaxis()->SetTitleOffset(0.6);
+    g_Pargraph[j]->GetYaxis()->SetTitleOffset(1.2);
     g_Pargraph[j]->GetYaxis()->LabelsOption("v");
     g_Pargraph[j]->SetTitle(temp_title);
     g_Pargraph[j]->Draw();
     f_Parfunc[j]->Draw("SAME");    
+    g_Pargraph_clone[j]->Draw("SAME");
   }
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();  
     
 }
-
 
 void Usage()
 {
@@ -279,6 +315,7 @@ int main(int argc, char ** argv)
 
   
   vector<TH1*> hist_list;
+  vector<TH1*> hist_list_2;
 
 
   //////////////////////////////////
@@ -288,7 +325,7 @@ int main(int argc, char ** argv)
   TGraphErrors * g_pFDmom_pFDDeltaP_thetaGroup[6][16];
   TF1 * f_pFDmom_pFDDeltaP_thetaGroup[6][16];
   TFitResultPtr p_pFDmom_pFDDeltaP_thetaGroup[6][16];
-  TGraph * g_pFDmom_pFDDeltaP_Pars[6][3];
+  TGraphErrors * g_pFDmom_pFDDeltaP_Pars[6][3];
   TF1 * f_pFDmom_pFDDeltaP_Pars[6][3];
   TFitResultPtr p_pFDmom_pFDDeltaP_Pars[6][3];
   TF1 * f_pFDmom_pFDDeltaP_combined_thetaGroup[6][16];
@@ -299,7 +336,8 @@ int main(int argc, char ** argv)
       double max = (double)i*2.5 + 5.5;
       sprintf(temp_name,"h_pFDmom_pFDDeltaP_sector_%d_thetaGroup_%d",k+1,i+1);
       h_pFDmom_pFDDeltaP_thetaGroup[k][i] = (TH2D*)inFile->Get(temp_name);
-      sprintf(temp_title,"#Delta p_{E.L.} vs. p  Sector = %d (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",k+1,min,max);
+      //sprintf(temp_title,"#Delta p_{E.L.} vs. p  Sector = %d (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",k+1,min,max);
+      sprintf(temp_title,"Sector = %d (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.} [GeV]",k+1,min,max);
       h_pFDmom_pFDDeltaP_thetaGroup[k][i]->SetTitle(temp_title);
       hist_list.push_back(h_pFDmom_pFDDeltaP_thetaGroup[k][i]);
       g_pFDmom_pFDDeltaP_thetaGroup[k][i] = new TGraphErrors();
@@ -312,12 +350,13 @@ int main(int argc, char ** argv)
       f_pFDmom_pFDDeltaP_combined_thetaGroup[k][i] = new TF1(temp_name,[&](double *x, double *p){ return func(x[0],p[0],p[1],p[2]); },0.2,6,3);
       sprintf(temp_name,"h_pFDmom_pFDDeltaP_corrected_sector_%d_thetaGroup_%d",k+1,i+1);
       h_pFDmom_pFDDeltaP_corrected_thetaGroup[k][i] = (TH2D*)inFile->Get(temp_name);
-      sprintf(temp_title,"Corrected #Delta p_{E.L.} vs. p  Sector = %d (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",k+1,min,max);
+      //sprintf(temp_title,"Corrected #Delta p_{E.L.} vs. p  Sector = %d (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",k+1,min,max);
+      sprintf(temp_title,"Sector = %d (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.} [GeV]",k+1,min,max);
       h_pFDmom_pFDDeltaP_corrected_thetaGroup[k][i]->SetTitle(temp_title);
       hist_list.push_back(h_pFDmom_pFDDeltaP_corrected_thetaGroup[k][i]);
     }
     for(int j=0; j<3; j++){
-      g_pFDmom_pFDDeltaP_Pars[k][j] = new TGraph();
+      g_pFDmom_pFDDeltaP_Pars[k][j] = new TGraphErrors();
       sprintf(temp_name,"g_pFDmom_pFDDeltaP_sector_%d_Pars_%d",k+1,j+1);
       g_pFDmom_pFDDeltaP_Pars[k][j]->SetName(temp_name);
       g_pFDmom_pFDDeltaP_Pars[k][j]->SetLineColor(3);
@@ -348,7 +387,7 @@ int main(int argc, char ** argv)
   TGraphErrors * g_pFDmom_pFDDeltaP_int_thetaGroup[16];
   TF1 * f_pFDmom_pFDDeltaP_int_thetaGroup[16];
   TFitResultPtr p_pFDmom_pFDDeltaP_int_thetaGroup[16];
-  TGraph * g_pFDmom_pFDDeltaP_int_Pars[3];
+  TGraphErrors * g_pFDmom_pFDDeltaP_int_Pars[3];
   TF1 * f_pFDmom_pFDDeltaP_int_Pars[3];
   TFitResultPtr p_pFDmom_pFDDeltaP_int_Pars[3];
   TF1 * f_pFDmom_pFDDeltaP_int_combined_thetaGroup[16];
@@ -358,7 +397,8 @@ int main(int argc, char ** argv)
     double max = (double)i*2.5 + 5.5;
     sprintf(temp_name,"h_pFDmom_pFDDeltaP_int_thetaGroup_%d",i+1);
     h_pFDmom_pFDDeltaP_int_thetaGroup[i] = (TH2D*)inFile->Get(temp_name);
-    sprintf(temp_title,"#Delta p_{E.L.} vs. p (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",min,max);
+    //sprintf(temp_title,"#Delta p_{E.L.} vs. p (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",min,max);
+    sprintf(temp_title,"(%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.} [GeV]",min,max);
     h_pFDmom_pFDDeltaP_int_thetaGroup[i]->SetTitle(temp_title);
     hist_list.push_back(h_pFDmom_pFDDeltaP_int_thetaGroup[i]);
     g_pFDmom_pFDDeltaP_int_thetaGroup[i] = new TGraphErrors();
@@ -371,12 +411,13 @@ int main(int argc, char ** argv)
     f_pFDmom_pFDDeltaP_int_combined_thetaGroup[i] = new TF1(temp_name,[&](double *x, double *p){ return func(x[0],p[0],p[1],p[2]); },0.2,6,3);
     sprintf(temp_name,"h_pFDmom_pFDDeltaP_int_corrected_thetaGroup_%d",i+1);
     h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i] = (TH2D*)inFile->Get(temp_name);
-    sprintf(temp_title,"Corrected #Delta p_{E.L.} vs. p (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",min,max);
+    //sprintf(temp_title,"Corrected #Delta p_{E.L.} vs. p (%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.}",min,max);
+    sprintf(temp_title,"(%.1f #circ< #theta < %.1f #circ);p [GeV]; #Delta p_{E.L.} [GeV]",min,max);
     h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->SetTitle(temp_title);
     hist_list.push_back(h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]);
   }
   for(int j=0; j<3; j++){
-    g_pFDmom_pFDDeltaP_int_Pars[j] = new TGraph();
+    g_pFDmom_pFDDeltaP_int_Pars[j] = new TGraphErrors();
     sprintf(temp_name,"g_pFDmom_pFDDeltaP_int_Pars_%d",j+1);
     g_pFDmom_pFDDeltaP_int_Pars[j]->SetName(temp_name);
     g_pFDmom_pFDDeltaP_int_Pars[j]->SetLineColor(3);
@@ -395,7 +436,9 @@ int main(int argc, char ** argv)
   for(int j=0; j<6; j++){
     sprintf(temp_name,"h_pFDtheta_pFDDeltaP_sector_%d",j+1);
     h_pFDtheta_pFDDeltaP[j] = (TH2D*)inFile->Get(temp_name);
-    hist_list.push_back(h_pFDtheta_pFDDeltaP[j]);
+    sprintf(temp_title,"Sector = %d;#theta #circ; #Delta p_{E.L.} [GeV]",j+1);
+    h_pFDtheta_pFDDeltaP[j]->SetTitle(temp_title);
+    hist_list_2.push_back(h_pFDtheta_pFDDeltaP[j]);
     g_pFDtheta_pFDDeltaP[j] = new TGraphErrors();
     sprintf(temp_name,"g_pFDtheta_pFDDeltaP_sector_%d",j+1);
     g_pFDtheta_pFDDeltaP[j]->SetName(temp_name);
@@ -407,7 +450,9 @@ int main(int argc, char ** argv)
   for(int j=0; j<6; j++){
     sprintf(temp_name,"h_pFDphi_pFDDeltaP_sector_%d",j+1);
     h_pFDphi_pFDDeltaP[j] = (TH2D*)inFile->Get(temp_name);
-    hist_list.push_back(h_pFDphi_pFDDeltaP[j]);
+    sprintf(temp_title,"Sector = %d; #phi #circ ; #Delta p_{E.L.} [GeV]",j+1);
+    h_pFDphi_pFDDeltaP[j]->SetTitle(temp_title);
+    hist_list_2.push_back(h_pFDphi_pFDDeltaP[j]);
     g_pFDphi_pFDDeltaP[j] = new TGraphErrors();
     sprintf(temp_name,"g_pFDphi_pFDDeltaP_sector_%d",j+1);
     g_pFDphi_pFDDeltaP[j]->SetName(temp_name);
@@ -416,18 +461,42 @@ int main(int argc, char ** argv)
 
   for(int i=0; i<hist_list.size(); i++){
     hist_list[i]->Sumw2();
+    hist_list[i]->SetTitleFont(0.12);
     hist_list[i]->GetXaxis()->CenterTitle();
-    hist_list[i]->GetXaxis()->SetTitleSize(0.07);
+    hist_list[i]->GetXaxis()->SetTitleSize(0.12);
+    hist_list[i]->GetXaxis()->SetLabelSize(0.06);
     hist_list[i]->GetXaxis()->SetTitleOffset(0.6);
     hist_list[i]->GetYaxis()->CenterTitle();
-    hist_list[i]->GetYaxis()->SetTitleSize(0.07);
+    hist_list[i]->GetYaxis()->SetTitleSize(0.12);
+    hist_list[i]->GetYaxis()->SetLabelSize(0.06);
     hist_list[i]->GetYaxis()->SetTitleOffset(0.6);
   }
 
+  for(int i=0; i<hist_list_2.size(); i++){
+    hist_list_2[i]->Sumw2();
+    //hist_list_2[i]->SetTitleFont(0.12);
+    hist_list_2[i]->GetXaxis()->CenterTitle();
+    hist_list_2[i]->GetXaxis()->SetTitleSize(0.12);
+    hist_list_2[i]->GetXaxis()->SetLabelSize(0.06);
+    hist_list_2[i]->GetXaxis()->SetTitleOffset(0.6);
+    hist_list_2[i]->GetYaxis()->CenterTitle();
+    hist_list_2[i]->GetYaxis()->SetTitleSize(0.12);
+    hist_list_2[i]->GetYaxis()->SetLabelSize(0.06);
+    hist_list_2[i]->GetYaxis()->SetTitleOffset(0.6);
+  }
+
+  
   /////////////////////////////////////////////////////
   //Now create the output PDFs
   /////////////////////////////////////////////////////
   
+
+  TStyle *myStyle  = new TStyle("MyStyle","My Root Styles");
+  myStyle->SetPalette("kbird",0);
+  myStyle->SetTitleSize(0.10, "t");
+  myStyle->SetOptStat(0);
+  myStyle->cd();
+
   int pixelx = 1980;
   int pixely = 1530;
   TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
@@ -446,9 +515,11 @@ int main(int argc, char ** argv)
     getABC(h_pFDmom_pFDDeltaP_thetaGroup[k],g_pFDmom_pFDDeltaP_thetaGroup[k],f_pFDmom_pFDDeltaP_thetaGroup[k],p_pFDmom_pFDDeltaP_thetaGroup[k],0.3,5.5,g_pFDmom_pFDDeltaP_Pars[k],f_pFDmom_pFDDeltaP_Pars[k],p_pFDmom_pFDDeltaP_Pars[k],f_pFDmom_pFDDeltaP_combined_thetaGroup[k],myCanvas,fileName);
   }
   
-  myCanvas->Divide(2,2);
+  myCanvas->Divide(2,2,0,0);
   for(int j=0; j<3; j++){
-    myCanvas->cd(j+1);    
+    auto pad = myCanvas->cd(j+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     g_pFDmom_pFDDeltaP_int_Pars[j]->Draw();
     for(int k=0; k<6; k++){
       g_pFDmom_pFDDeltaP_Pars[k][j]->SetLineColor(k+2);
@@ -458,9 +529,11 @@ int main(int argc, char ** argv)
   myCanvas->Print(fileName,"pdf");
   myCanvas->Clear();  
   
-  myCanvas->Divide(3,3);  
+  myCanvas->Divide(4,4,0,0);  
   for(int i=0; i<16; i++){
-    myCanvas->cd(i+1);
+    auto pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
     f_pFDmom_pFDDeltaP_int_combined_thetaGroup[i]->SetLineWidth(3);
     f_pFDmom_pFDDeltaP_int_combined_thetaGroup[i]->Draw();
     for(int k=0; k<6; k++){
@@ -474,14 +547,161 @@ int main(int argc, char ** argv)
 
 
   for(int sector = 0; sector<6; sector++){
-    myCanvas->Divide(4,4);
-    for(int i=0; i<16; i++){
-      myCanvas->cd(i+1);    
+    myCanvas->Divide(4,4,0,0);
+    for(int i=1; i<15; i++){
+      auto pad = myCanvas->cd(i);    
+      pad->SetBottomMargin(0.19);
+      pad->SetLeftMargin(0.19);
       h_pFDmom_pFDDeltaP_corrected_thetaGroup[sector][i]->Draw("colz");
     }
     myCanvas->Print(fileName,"pdf");
     myCanvas->Clear(); 
   }
+
+  
+  myCanvas->Divide(4,4,0,0);
+  for(int i=1; i<15; i++){
+    auto pad = myCanvas->cd(i);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
+    for(int sector = 0; sector<6; sector++){
+      h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->Add(h_pFDmom_pFDDeltaP_corrected_thetaGroup[sector][i],1);
+    }
+    h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->Draw("colz");
+  }
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear(); 
+
+  myCanvas->Divide(4,4,0,0);
+  for(int i = 1; i < 15; i++){
+    double min = (double)i*2.5 + 3.0;
+    double max = (double)i*2.5 + 5.5;
+    sprintf(temp_name,"h_pFDDeltaP_int_thetaGroup_%d",i+1);
+    sprintf(temp_title,"(%.1f #circ< #theta < %.1f #circ); #Delta p_{E.L.} [GeV]; Counts",min,max);
+    TH1D * h_proj = h_pFDmom_pFDDeltaP_int_thetaGroup[i]->ProjectionY(temp_name,0,h_pFDmom_pFDDeltaP_int_thetaGroup[i]->GetNbinsX());
+    h_proj->SetTitle(temp_title);
+    h_proj->Rebin(2);
+    sprintf(temp_name,"h_pFDDeltaP_int_corrected_thetaGroup_%d",i+1);
+    sprintf(temp_title,"(%.1f #circ< #theta < %.1f #circ); #Delta p_{E.L.} [GeV]; Counts",min,max);
+    TH1D * h_proj_corr = h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->ProjectionY(temp_name,0,h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->GetNbinsX());
+    h_proj_corr->SetTitle(temp_title);
+
+    myCanvas->cd(i);
+    myCanvas->GetPad(i)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i)->SetTopMargin(0.19);
+    myCanvas->GetPad(i)->SetLeftMargin(0.19);
+    h_proj->GetXaxis()->CenterTitle();
+    h_proj->GetXaxis()->SetTitleSize(0.12);
+    h_proj->GetXaxis()->SetLabelSize(0.06);
+    h_proj->GetXaxis()->SetTitleOffset(0.6);
+    h_proj->GetYaxis()->CenterTitle();
+    h_proj->GetYaxis()->SetTitleSize(0.12);
+    h_proj->GetYaxis()->SetLabelSize(0.06);
+    h_proj->GetYaxis()->SetTitleOffset(0.6);
+
+    h_proj_corr->SetLineColor(2);
+    h_proj_corr->Draw();
+    h_proj->Draw("SAME");
+  }
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear(); 
+
+  double means_list[14];
+  double sigmas_list[14];
+  double means_list_corr[14];
+  double sigmas_list_corr[14];
+  myCanvas->Divide(4,4,0,0);
+  for(int i = 1; i < 15; i++){
+    double min = (double)i*2.5 + 3.0;
+    double max = (double)i*2.5 + 5.5;
+    sprintf(temp_name,"h_pFDDeltaP_int_thetaGroup_%d",i+1);
+    sprintf(temp_title,"(%.1f #circ< #theta < %.1f #circ); #Delta p_{E.L.} [GeV]; Counts",min,max);
+    TH1D * h_proj = h_pFDmom_pFDDeltaP_int_thetaGroup[i]->ProjectionY(temp_name,0,h_pFDmom_pFDDeltaP_int_thetaGroup[i]->GetNbinsX());
+    h_proj->SetTitle(temp_title);
+    h_proj->Rebin(2);
+    sprintf(temp_name,"h_pFDDeltaP_int_corrected_thetaGroup_%d",i+1);
+    sprintf(temp_title,"(%.1f #circ< #theta < %.1f #circ); #Delta p_{E.L.} [GeV]; Counts",min,max);
+    TH1D * h_proj_corr = h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->ProjectionY(temp_name,0,h_pFDmom_pFDDeltaP_int_corrected_thetaGroup[i]->GetNbinsX());
+    h_proj_corr->SetTitle(temp_title);
+
+    TF1 * gFit = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
+    double maxbin=h_proj->GetMaximumBin();
+    double mode = (i<14)?h_proj->GetBinCenter(maxbin):0.02;
+    gFit->SetParameter(0,h_proj->GetMaximum()/G(0,1,0,0.1));
+    gFit->SetParameter(1,mode);
+    gFit->SetParLimits(1,mode-0.02,mode+0.02);
+    gFit->SetParameter(2,0.01);
+    gFit->SetParLimits(2,0.001,0.05);
+    TFitResultPtr gPoint = h_proj->Fit(gFit,"SrBeqn","",-0.05,0.05);
+    if(gPoint==0){
+      means_list[i-1]=gPoint->Parameter(1);
+      sigmas_list[i-1]=gPoint->Parameter(2);
+    }
+
+
+    TF1 * gFit_corr = new TF1("GausFit",[&](double *x, double *p){ return G(x[0],p[0],p[1],p[2]); },-0.05,0.05,3);
+    double maxbin_corr=h_proj_corr->GetMaximumBin();
+    double mode_corr = h_proj_corr->GetBinCenter(maxbin_corr);
+    gFit_corr->SetParameter(0,h_proj_corr->GetMaximum()/G(0,1,0,0.1));
+    gFit_corr->SetParameter(1,mode_corr);
+    gFit_corr->SetParLimits(1,mode_corr-0.02,mode_corr+0.02);
+    gFit_corr->SetParameter(2,0.01);
+    gFit_corr->SetParLimits(2,0.001,0.05);
+    TFitResultPtr gPoint_corr = h_proj_corr->Fit(gFit_corr,"SrBeqn","",-0.05,0.02);
+    if(gPoint_corr==0){
+      means_list_corr[i-1]=gPoint_corr->Parameter(1);
+      sigmas_list_corr[i-1]=gPoint_corr->Parameter(2);
+    }
+
+
+
+    myCanvas->cd(i);
+    myCanvas->GetPad(i)->SetBottomMargin(0.19);
+    myCanvas->GetPad(i)->SetTopMargin(0.19);
+    myCanvas->GetPad(i)->SetLeftMargin(0.19);
+    h_proj->GetXaxis()->CenterTitle();
+    h_proj->GetXaxis()->SetTitleSize(0.12);
+    h_proj->GetXaxis()->SetLabelSize(0.06);
+    h_proj->GetXaxis()->SetTitleOffset(0.6);
+    h_proj->GetYaxis()->CenterTitle();
+    h_proj->GetYaxis()->SetTitleSize(0.12);
+    h_proj->GetYaxis()->SetLabelSize(0.06);
+    h_proj->GetYaxis()->SetTitleOffset(0.6);
+
+    h_proj_corr->SetLineColor(2);
+    h_proj_corr->Draw();
+    h_proj->Draw("SAME");
+
+    gFit->SetLineColor(4);
+    gFit->Draw("SAME");
+
+    gFit_corr->SetLineColor(2);
+    gFit_corr->Draw("SAME");
+  }
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear(); 
+
+
+  myCanvas->Divide(2,3,0,0);
+  for(int i = 0; i < 6; i++){
+    auto pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
+    h_pFDphi_pFDDeltaP[i]->Draw();
+  }
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear(); 
+
+  myCanvas->Divide(2,3,0,0);
+  for(int i = 0; i < 6; i++){
+    auto pad = myCanvas->cd(i+1);    
+    pad->SetBottomMargin(0.19);
+    pad->SetLeftMargin(0.19);
+    h_pFDtheta_pFDDeltaP[i]->Draw();
+  }
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear(); 
+
   
   sprintf(fileName,"%s]",pdfFile);
   myCanvas->Print(fileName,"pdf");
@@ -499,7 +719,10 @@ int main(int argc, char ** argv)
       <<p_pFDmom_pFDDeltaP_int_Pars[2]->Parameter(1)<<","
       <<p_pFDmom_pFDDeltaP_int_Pars[2]->Parameter(2)
       <<"}}"<<endl;
-  
+
+  for(int i = 0; i < 14; i++){
+    cout<<means_list[i]*1000<<"&"<<means_list_corr[i]*1000<<"&"<<sigmas_list[i]*1000<<"&"<<sigmas_list_corr[i]*1000<<"\n";
+  }
   
   return 0;
 }

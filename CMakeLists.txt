@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CLAS12ROOT $ENV{CLAS12ROOT})
 set(HIPO $ENV{HIPO})
+include_directories(${HIPO}/include/hipo4)
+
 find_package(ROOT)
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS}) 
 include(${ROOT_USE_FILE})
@@ -15,7 +17,7 @@ pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
 set(INCLUDES ${ROOT_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/libraries/simulation_reweighting ${HIPO}/include)
 set(LIBRARIES ${CMAKE_SOURCE_DIR}/libraries ${HIPO}/lib)
 include_directories(${CLAS12ROOT}/Clas12Banks ${CLAS12ROOT}/Clas12Root ${INCLUDES} ${LIBRARIES})
-
+link_directories(${CLAS12ROOT}/lib64)
 
 add_definitions(-D_CLAS12ANA_DIR="${CMAKE_SOURCE_DIR}")
 

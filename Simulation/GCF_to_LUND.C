@@ -48,6 +48,8 @@ void GCF_to_LUND(TString inputFile = "", TString outputFile = "", string target 
   
   int nEvents = T->GetEntries();
   cout<<"Number of events "<<nEvents<<endl;
+
+  int nOutEvents = 0;
   
   ofstream outfile;
   outfile.open(outputFile); 
@@ -61,13 +63,16 @@ void GCF_to_LUND(TString inputFile = "", TString outputFile = "", string target 
     {
       T->GetEntry(i);
       TVector3 ve(pe[0],pe[1],pe[2]);
+      TVector3 vLead(pLead[0],pLead[1],pLead[2]);
       TVector3 q = vBeam - ve;
       double nu = vBeam.Mag() - ve.Mag();
       double Q2 = q.Mag2() - nu*nu;
       double xB = Q2/(2*mass_p*nu);
       //Optional xB cut
-      //if(xB<1.0){continue;}
-      
+      if(xB<1.1){continue;}
+      if(Q2<1.3){continue;}
+      if(vLead.Mag()<0.9){continue;}
+      //if(vLead.Theta()*180/M_PI > 40){continue;}
       // LUND header for the event:
       formatstring = "%i \t %i \t %i \t %.3f \t %.3f \t %i \t %.1f \t %i \t %i \t %.3f \n";
       outstring = Form(formatstring, nParticles, A, Z, targP, beamP, beamType, beamE, interactN, i, weight);
@@ -98,8 +103,12 @@ void GCF_to_LUND(TString inputFile = "", TString outputFile = "", string target 
       outfile << addParticle(4,0,2212,TVector3(q[0],q[1],q[2]),0,vtx);
       //rel SRC
       outfile << addParticle(5,0,2212,TVector3(pRel[0],pRel[1],pRel[2]),0,vtx);
+
+      nOutEvents++;
     }
-  
+
+  cout<<"Number of output events "<<nOutEvents<<endl;
+
   outfile.close();
   //  gSystem->Exec(".q");
 

@@ -8,16 +8,12 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TLorentzVector.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <TLatex.h>
 #include <TChain.h>
-#include <TCanvas.h>
-#include <TStyle.h>
 #include <TDatabasePDG.h>
 #include "HipoChain.h"
 #include "HipoChainWriter.h"
 #include "clas12ana.h"
+#include "Functions.h"
 
 using namespace std;
 using namespace clas12;
@@ -29,124 +25,96 @@ void SetLorentzVector(TLorentzVector &p4,clas12::region_part_ptr rp){
 
 void Usage()
 {
-  std::cerr << "Skimmer for hipofiles \n";
-  std::cerr << "Usage: ./testAna outputfile.hipo inputfile_1.hipo inputfile_2.hipo ... \n\n\n";
-}
+  std::cerr << "Usage: ./code outputfile.hipo inputfiles.hipo  \n\n\n";
 
+}
 
 
 int main(int argc, char ** argv)
 {
 
-  if(argc < 2)
+  if(argc < 3)
     {
       Usage();
       return -1;
     }
 
-
-  TString outFile = argv[1];
-  cout<<"Ouput file "<< outFile <<endl;
-
-  clas12root::HipoChainWriter chain(outFile);
-  chain.SetReaderTags({0});
-  chain.db()->turnOffQADB();
-
-  if(argc >= 2)
-    {
-      for(int i = 2; i != argc; ++i)
-	{
-          TString inFile(argv[i]);
-          chain.Add(inFile);
-          cout<<"Input file "<< inFile << "\n";
-	}
-    }
-
-
+  //This is the clas12ana class that helps us
+  //cut on detector level and SRC variables.
   clas12ana clasAna;
   clasAna.printParams();
 
+  //Take the output file name
+  char * outName = argv[1];
+  cout<<"Ouput file "<< outName <<endl;
+
+  //make c12writer for the output hipo file
+  clas12root::HipoChainWriter chain(outName);
+  //Now add the input files to the chain
+  for(int k = 2; k < argc; k++){
+    cout<<"Input file "<<argv[k]<<endl;
+    chain.Add(argv[k]);
+  }
+  //Some necessary tags for the chain
+  chain.SetReaderTags({0});
+  chain.db()->turnOffQADB();
+  //And this is the object we use to get event
+  //details.
   auto config_c12=chain.GetC12Reader();
-
-  //now get reference to (unique)ptr for accessing data in loop
-  //this will point to the correct place when file changes
-  //  const std::unique_ptr<clas12::clas12reader>& c12=chain.C12ref();
-
-  int counter = 0;
-  int cutcounter = 0;
-
   auto &c12=chain.C12ref();
 
+  ////////////////////////////////////////////////
+
+  //Define some useful variables
+  int counter = 0;
   auto db=TDatabasePDG::Instance();
   double mass_p = db->GetParticle(2212)->Mass();
   double mD = 1.8756;
-
-  double beam_E = 5.98;
-
-  //some particles
+  double beam_E = 5.98636;
   TLorentzVector beam(0,0,beam_E,beam_E);
-  TLorentzVector target(0,0,0,mD);
+  TLorentzVector deut_ptr(0,0,0,mD);
   TLorentzVector el(0,0,0,db->GetParticle(11)->Mass());
-  TLorentzVector lead_ptr(0,0,0,db->GetParticle(2212)->Mass());
-  TLorentzVector recoil_ptr(0,0,0,db->GetParticle(2212)->Mass());
-  TLorentzVector ntr(0,0,0,db->GetParticle(2112)->Mass());
-
-  TH1D *q2_h = new TH1D("q2_h","Q^2 ",1000,0, 4);
-  TH1D *xb_h = new TH1D("xb_h","x_B ",1000,0, 4);
-  TH1D *px_com = new TH1D("px_com","Px COM",1000,-500,500);
-  TH1D *py_com = new TH1D("py_com","Py COM",1000,-500,500);
-  TH1D *pz_com = new TH1D("pz_com","Pz COM",1000,-500,500);
-
-  TH1D *epp_h = new TH1D("epp_h","(e,e'pp)",100,0,2);
-  TH1D *ep_h  = new TH1D("ep_h","(e,e'p)",100,0,2);
-
+  
+  //Now loop over all events in the input files.
   while(chain.Next())
     {
-      //Display completed  
+      //Display number of completed events
       counter++;
+      if((counter%1000000) == 0){
+	cerr << "\n" <<counter/1000000 <<" million completed";
+      }    
+      if((counter%100000) == 0){
+	cerr << ".";
+      }    
 
+      //Here is where you run the clas12ana class.
+      //It does the pid, fiducial, and vertex cuts
+      //on all particles and returns particles
+      //by PID number.
       clasAna.Run(c12);
-
       auto electrons = clasAna.getByPid(11);
       auto protons = clasAna.getByPid(2212);
+      //auto pip = clasAna.getByPid(211);
+      //auto pim = clasAna.getByPid(-211);
 
-      bool anyCD_protons = false;
-
-      if(electrons.size() > 0 && protons.size() > 0)
-	{
-	  for(auto &p : protons)
-	    {
-	      if(p->getRegion() == clas12::CD)
-	      anyCD_protons = true;
-	    }
-	}
-
-      if(anyCD_protons)
-	chain.WriteEvent();
-
-      /*
-      //Example for Lead proton skims
-      auto electrons = clasAna.getByPid(11);
-      auto protons = clasAna.getByPid(2212);
-
-
+      //In this skim we only keep events with
+      //exactly 1 proton.
       if(electrons.size() == 1)
 	{
           SetLorentzVector(el,electrons[0]);
-
-	  clasAna.getLeadRecoilSRC(beam,target,el);
+	  TLorentzVector q = beam - el;
+          double Q2 = -q.M2();
+          double xB = Q2/(2 * mass_p * (beam.E() - el.E()));
+	  if(xB<1.5){continue;}
+	  if(Q2<1){continue;}
+	  clasAna.getLeadRecoilSRC(beam,deut_ptr,el);
 	  auto lead    = clasAna.getLeadSRC();
 	  auto recoil  = clasAna.getRecoilSRC();
-
-	  if(lead.size() == 1)
-	    chain.WriteEvent();
-
+	  //if(lead.size()!=1){continue;}
+	  //Finally you write the event you want to keep
+	  chain.WriteEvent();	  
 	}
-      */
-
     }
-
-
   return 0;
 }
 

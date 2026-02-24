@@ -17,190 +17,212 @@
 #include <TDatabasePDG.h>
 #include "HipoChain.h"
 #include "clas12ana.h"
+#include "reweighter.h"
+#include "TGraphErrors.h"
+#include "Corrections.h"
+
+
+// For Fitting
+#include "Fit/Fitter.h"
+#include "Fit/BinData.h"
+#include "Fit/UnBinData.h"
+#include "Fit/Chi2FCN.h"
+#include "Fit/FitResult.h"
+#include "Fit/DataOptions.h"
+#include "Fit/FitConfig.h"
+
+// For defining the functions
+#include "TList.h"
+#include "Math/WrappedMultiTF1.h"
+#include "HFitInterface.h"
+#include <vector>
+
+#include "Functions.h"
 
 using namespace std;
 using namespace clas12;
 
-void SetLorentzVector(TLorentzVector &p4,clas12::region_part_ptr rp){
-  p4.SetXYZM(rp->par()->getPx(),rp->par()->getPy(),rp->par()->getPz(),p4.M());
-
-}
 
 void Usage()
 {
-  std::cerr << "Usage: ./testAna Data(0)/MC(1) outputfile inputfile_1 inputfile_2 ... \n\n\n";
+  std::cerr << "Usage: ./code isMC(data=0,mc=1) A(4He=4) outputfile.root outputfile.pdf inputfiles.hipo \n\n\n";
 }
-
 
 int main(int argc, char ** argv)
 {
-
-  clas12root::HipoChain chain;
-  chain.SetReaderTags({0});
-  chain.db()->turnOffQADB();
-
-  if(argc < 3)
+  
+  if(argc < 5)
     {
       Usage();
       return -1;
     }
 
-
-
-  TString outFile = argv[2];
+  //Start by defining the inputs
+  int isMC = atoi(argv[1]);
+  int nucleus_A = atoi(argv[2]);
+  TString outFile = argv[3];
+  char * pdfFile = argv[4];
   cout<<"Ouput file "<< outFile <<endl;
-  std::stringstream  ss(argv[1]);
-  bool data_type;
-  //  if(!(ss >> std::boolalpha >> data_type))
-  if(!(ss >> data_type))
-    {std::cerr << "Data type invalid use 0 or 1"<<std::endl; return -1;}
-
-  if(argc >= 3)
-    {
-      for(int i = 3; i != argc; ++i)
-	{
-	  TString inFile(argv[i]);
-	  chain.Add(inFile);
-	  cout<<"Input file "<< inFile << "\n";
-	}
-    }
+  cout<<"Ouput PDF file "<< pdfFile <<endl;
 
 
-
-  //Constructor accepts
-  bool outputDebugPlots = true;
-  clas12ana clasAna(outputDebugPlots); 
-
+  //This is the clas12ana class that helps us
+  //cut on detector level and SRC variables.
+  clas12ana clasAna;
+  clasAna.printParams();
+    
+  //make hipochain for input
+  clas12root::HipoChain chain;
+  //Now add the input files to the chain
+  for(int k = 5; k < argc; k++){
+    cout<<"Input file "<<argv[k]<<endl;
+    chain.Add(argv[k]);
+  }
+  //Some necessary tags for the chain
+  chain.SetReaderTags({0});
+  chain.db()->turnOffQADB();
+  //And this is the object we use to get event
+  //details.
+  auto config_c12=chain.GetC12Reader();
   auto &c12=chain.C12ref();
 
+  ////////////////////////////////////////////////
+  
+  //Define some useful variables
   auto db=TDatabasePDG::Instance();
-  double mass_p = db->GetParticle(2212)->Mass();
-  double mD = 1.8756;
-
-  double beam_E = 5.98;
-
-  //some particles
+  const double beam_E = 5.98636;
+  const double mass_n = db->GetParticle(2112)->Mass();
+  const double mass_p = db->GetParticle(2212)->Mass();
+  const double mD = 1.8756;
   TLorentzVector beam(0,0,beam_E,beam_E);
-  TLorentzVector target(0,0,0,mD);
+  TLorentzVector deut_ptr(0,0,0,mD);
   TLorentzVector el(0,0,0,db->GetParticle(11)->Mass());
   TLorentzVector lead_ptr(0,0,0,db->GetParticle(2212)->Mass());
-  TLorentzVector recoil_ptr(0,0,0,db->GetParticle(2212)->Mass());
-  TLorentzVector ntr(0,0,0,db->GetParticle(2112)->Mass());
 
-  TH1D *q2_h = new TH1D("q2_h","Q^2 ",1000,0, 4);
-  TH1D *xb_h = new TH1D("xb_h","x_B ",1000,0, 4);
-  TH1D *px_com = new TH1D("px_com","Px COM",1000,-1000,1000);
-  TH1D *py_com = new TH1D("py_com","Py COM",1000,-1000,1000);
-  TH1D *pz_com = new TH1D("pz_com","Pz COM",1000,-1000,1000);
-  TH1D *epp_h = new TH1D("epp_h","(e,e'pp)",100,0,2);
-  TH1D *ep_h  = new TH1D("ep_h","(e,e'p)",100,0,2);
-  TH1D *missm = new TH1D("missm","Missing mass",100,0.5,1.5);
-  TH1D *htcc = new TH1D("htcc",";Counts;HTCC N_{e^{-}}",40,0,40);
-  TH1D *el_p_corr_cd = new TH1D("el_p_corr_cd","",100,-10,10);
-  TH1D *el_p_corr_fd = new TH1D("el_p_corr_fd","",100,-10,10);
+  //This is the reweighter which you can use to define
+  //new GCF variables on the weight such as sigma_CM
+  //and the potential.
+  int Z=2;
+  int N=2;
+  if(isMC){
+    Z=nucleus_A/2;
+    N=nucleus_A/2;
+  }
+  reweighter newWeight(beam_E,Z,N,kelly,"AV18");
+  //reweighter newWeight(beam_E,Z,N,kelly,"AV4");
+  //reweighter newWeight(beam_E,Z,N,kelly,"N2LO10");
+  //reweighter newWeight(beam_E,Z,N,kelly,"N2LO12");
+  //reweighter newWeight(beam_E,Z,N,kelly,"NV");
+  //////////////////////////////////
 
-  TH1D * lead_theta   = new TH1D("lead_theta","Lead Theta ",100,0,180);
-  TH1D * recoil_theta = new TH1D("recoil_theta","Recoil Theta ",100,0,180);
-
-  while(chain.Next())
+  //Define some histograms and a vector to put them
+  //in so that we can manipulate them quickly.
+  vector<TH1*> hist_list;
+  TH1D * h_xB = new TH1D("xB","xB",100,1.1,2.0);
+  hist_list.push_back(h_xB);
+  TH1D * h_Q2 = new TH1D("Q2","Q2",100,1.4,5.0);
+  hist_list.push_back(h_Q2);
+  TH1D * h_plead = new TH1D("plead","plead",100,0.9,4.0);
+  hist_list.push_back(h_plead);
+  TH1D * h_thetalead = new TH1D("thetalead","thetalead",100,0,45);
+  hist_list.push_back(h_thetalead);
+  
+  for(int i=0; i<hist_list.size(); i++){
+    hist_list[i]->Sumw2();
+    hist_list[i]->GetXaxis()->CenterTitle();
+    hist_list[i]->GetYaxis()->CenterTitle();
+  }
+  
+  //Now loop over all events in the input files.
+  int counter = 0;
+  while(chain.Next() && counter <100000000000000)
     {
 
-      double weight = 1.;
-      if(data_type)
-	weight = c12->mcevent()->getWeight(); //used if MC events have a weight 
+      //Define the weight which is 1 for data.
+      double weight = 1;
+      if(isMC){
+	double original_weight = c12->mcevent()->getWeight(); //used if MC events have a weight
+	weight = original_weight * newWeight.get_weight_ep(c12->mcparts());
+      }
 
+      //Display number of completed events
+      counter++;
+      if((counter%100000) == 0){
+	cerr << "\n" <<counter/100000 <<" hundred thousand completed";
+      }    
+      if((counter%10000) == 0){
+	cerr << ".";
+      }    
+
+      //Here is where you run the clas12ana class.
+      //It does the pid, fiducial, and vertex cuts
+      //on all particles and returns particles
+      //by PID number.
       clasAna.Run(c12);
-
       auto electrons = clasAna.getByPid(11);
       auto protons = clasAna.getByPid(2212);
+      if(electrons.size() != 1){continue;}
 
-      if(electrons.size() == 1)
-	{
-	  SetLorentzVector(el,electrons[0]);
-	  //	  SetLorentzVector(ptr,protons[0]);
+      //This line grabs the momentum after the
+      //energy loss corrections, angular corrections,
+      //momentum corrections, and smearing.
+      GetLorentzVector_Corrected(el,electrons[0],isMC);
+      TLorentzVector q = beam - el;
+      double Q2        = -q.M2();
+      double xB       = Q2/(2 * mass_p * (beam.E() - el.E()) );
 
-	  TLorentzVector q = beam - el; //photon  4-vector            
-          double q2        = -q.M2(); // Q^2
-          double x_b       = q2/(2 * mass_p * (beam.E() - el.E()) ); //x-borken
+      clasAna.getLeadRecoilSRC(beam,deut_ptr,el);
+      auto lead    = clasAna.getLeadSRC();
+      auto recoil  = clasAna.getRecoilSRC();
+      
+      if(lead.size()!=1){continue;}
+      GetLorentzVector_Corrected(lead_ptr,lead[0],isMC);
+      double mom_lead = lead_ptr.P();
+      double theta_lead = lead_ptr.Theta() * 180 / M_PI;
 
-	  double miss_p_l = 0;
-	  double miss_m   = 0;
-	  double theta_pq = 0;
-	  double p_q      = 0;
-	  double x_prime  = 0;
-
-	  q2_h->Fill(q2,weight);
-	  xb_h->Fill(x_b,weight);
-
-	  for(auto &p : clasAna.getByPid(2212))
-	    {
-	      if(p->getRegion() == CD)
-		el_p_corr_cd->Fill(electrons[0]->par()->getVz()-p->par()->getVz());
-	      else if(p->getRegion() == FD)
-		el_p_corr_fd->Fill(electrons[0]->par()->getVz()-p->par()->getVz());
-	    }
-
-
-	  clasAna.getLeadRecoilSRC(beam,target,el);
-	  auto lead    = clasAna.getLeadSRC();
-	  auto recoil  = clasAna.getRecoilSRC();
-
-	  if(lead.size() == 1)
-	    {
-
-	      SetLorentzVector(lead_ptr,lead[0]);
-	      TLorentzVector miss = beam + target - el - lead_ptr; //photon  4-vector            
-	      lead_theta->Fill(lead_ptr.Theta()*TMath::RadToDeg());
-	      ep_h->Fill(miss.P(),weight);
-
-
-	      if(recoil.size() == 1)
-		{
-		  missm->Fill(miss.M());
-
-		  SetLorentzVector(recoil_ptr,recoil[0]);
-		  auto com_vec = clasAna.getCOM(lead_ptr,recoil_ptr,q);
-
-		  recoil_theta->Fill(recoil_ptr.Theta()*TMath::RadToDeg());
-		  
-		  px_com->Fill(com_vec.X(),weight);
-		  py_com->Fill(com_vec.Y(),weight);
-		  pz_com->Fill(com_vec.Z(),weight);
-
-		  epp_h->Fill(miss.P(),weight);
-		  
-		}
-	    }
-	  
-
-	}
-
+      h_xB->Fill(xB,weight);
+      h_Q2->Fill(Q2,weight);
+      h_plead->Fill(mom_lead,weight);
+      h_thetalead->Fill(theta_lead,weight);
+       
     }
 
+  /////////////////////////////////////////////////////
+  //Now create the output PDFs
+  /////////////////////////////////////////////////////
 
-  TFile f(outFile,"RECREATE");
-  f.cd();
+  TFile *f = new TFile(outFile,"RECREATE");
+  f->cd();
+  for(int i=0; i<hist_list.size(); i++){
+    hist_list[i]->Write();
+  }
 
-  lead_theta->Write();
-  recoil_theta->Write();
+  int pixelx = 1980;
+  int pixely = 1530;
+  TCanvas * myCanvas = new TCanvas("myPage","myPage",pixelx,pixely);
+  TCanvas * myText = new TCanvas("myText","myText",pixelx,pixely);
+  
+  char fileName[100];
+  sprintf(fileName,"%s[",pdfFile);
+  myText->SaveAs(fileName);
+  sprintf(fileName,"%s",pdfFile);
+  
+  myCanvas->Divide(2,2);
+  myCanvas->cd(1);    
+  h_xB->Draw();
+  myCanvas->cd(2);    
+  h_Q2->Draw();
+  myCanvas->cd(3);    
+  h_plead->Draw();
+  myCanvas->cd(4);    
+  h_thetalead->Draw();
+  myCanvas->Print(fileName,"pdf");
+  myCanvas->Clear();  
+    
+  sprintf(fileName,"%s]",pdfFile);
+  myCanvas->Print(fileName,"pdf");
 
-  q2_h->Write();
-  xb_h->Write();
-
-  px_com->Write();
-  py_com->Write();
-  pz_com->Write();
-
-  ep_h->Write();
-  epp_h->Write();
-  missm->Write();
-  htcc->Write();
-  el_p_corr_fd->Write();
-  el_p_corr_cd->Write();
-
-  f.Close();
-
+  f->Close();
 
   return 0;
 }
-

@@ -16,12 +16,17 @@ double beamspread_y = 0.04;
 //Targets: liquid, 4-foil, 1-foil, Ar, Ca
 double global_z = -3;  // center of hallB in GEMC in cm
 
+//Targets: Ar
+double Ar_cell_z = -2.5; // offset of the Ar cryocell center relative to the Hall B center in GEMC in cm
+
 std::map <std::string, std::vector<double> > targets {
-  {"4-foil", {-1.875 + global_z,-0.625 + global_z,0.625 + global_z, 1.875 + global_z}},
-  {"1-foil", {global_z + 2.5}},
-  {"Ar",     {global_z - 2.5}},
-  {"Ca",     {global_z}},
-  {"liquid", {global_z - 2.5, global_z + 2.5}}
+  {"4-foil",       {-1.875 + global_z,-0.625 + global_z,0.625 + global_z, 1.875 + global_z}},
+  {"1-foil",       {global_z + 2.5}},
+  {"1-foil-small", {global_z + 0.9}},
+  {"1-foil-large", {global_z + 0.68}},
+  {"Ar",           {Ar_cell_z + global_z - 0.25, Ar_cell_z + global_z + 0.25}},
+  {"Ca",           {global_z}},
+  {"liquid",       {global_z - 2.5, global_z + 2.5}}
 };
 
 
@@ -32,7 +37,7 @@ TVector3 randomVertex(string target)
   if(targets.find(target) != targets.end())
     {
 
-      if(target == "liquid")
+      if(target == "liquid" || target == "Ar")
 	{
 	  x = ran.Gaus(beamspot_x,beamspread_x);
 	  y = ran.Gaus(beamspot_y,beamspread_y);
